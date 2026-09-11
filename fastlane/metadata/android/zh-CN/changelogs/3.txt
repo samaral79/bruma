@@ -1,0 +1,1 @@
+移除 uBlock Origin 附带的 WebAssembly 二进制文件，改用其 JavaScript 实现，结果完全相同。Gradle wrapper 已固定版本并校验。

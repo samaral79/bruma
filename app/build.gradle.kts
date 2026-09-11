@@ -25,8 +25,8 @@ android {
         // O GeckoView 155 exige 26; o tor embutido 21; o Compose 23.
         minSdk = 26
         targetSdk = 36
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = 3
+        versionName = "1.0.2"
         vectorDrawables { useSupportLibrary = true }
     }
 

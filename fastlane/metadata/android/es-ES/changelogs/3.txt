@@ -1,0 +1,1 @@
+Eliminados los binarios WebAssembly del uBlock Origin; pasa a usar su ruta en JavaScript, con resultados idénticos. Wrapper de Gradle fijado y verificado por suma.

@@ -1,0 +1,1 @@
+Removed the WebAssembly binaries bundled with uBlock Origin; it falls back to its JavaScript path, which produces identical results. Gradle wrapper pinned and checksum-verified.
