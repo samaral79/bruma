@@ -19,6 +19,15 @@ if [ ! -f keystore.properties ]; then
   exit 1
 fi
 
+# Uma etiqueta tem de apontar para um commit que exista. Etiquetar com
+# alterações por guardar dá uma versão que ninguém consegue reproduzir a partir
+# do repositório — que é precisamente o que o IzzyOnDroid e o F-Droid pedem.
+if [ -n "$(git status --porcelain)" ]; then
+  echo "Há alterações por commitar. Guarda-as antes de lançar:"
+  git status --short
+  exit 1
+fi
+
 VERSAO=$(grep -oP 'versionName = "\K[^"]+' app/build.gradle.kts)
 CODIGO=$(grep -oP 'versionCode = \K[0-9]+' app/build.gradle.kts)
 echo "A lançar a v$VERSAO (versionCode $CODIGO)"
@@ -28,9 +37,19 @@ if git rev-parse "v$VERSAO" >/dev/null 2>&1; then
   exit 1
 fi
 
+SAIDA=app/build/outputs/apk/release
+SAIDA_TESTE="$SAIDA/app-arm64-v8a-release.apk"
+
 ./gradlew :app:assembleRelease
 
-SAIDA=app/build/outputs/apk/release
+# Confirmar que saiu mesmo assinado: um APK sem assinatura instala em lado
+# nenhum, e o erro só apareceria no telemóvel de quem o tentasse instalar.
+ALINHADOR=$(ls -d "${ANDROID_HOME:-$HOME/android-sdk}"/build-tools/* | sort -V | tail -1)
+if ! "$ALINHADOR/apksigner" verify "$SAIDA_TESTE" >/dev/null 2>&1; then
+  echo "O APK saiu sem assinatura válida. Verifica o keystore.properties."
+  exit 1
+fi
+
 # Os APKs por arquitetura são os que interessam: o universal leva quatro motores
 # dos quais o telemóvel só usa um, e passa dos 300 MB.
 APKS=$(ls "$SAIDA"/app-*-release.apk | grep -v universal)
