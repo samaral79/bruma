@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="canal_tor_descricao">Estado del cliente Tor integrado</string>
+
+    <string name="widget_procurar">Buscar con Bruma</string>
+    <string name="widget_com_tor">Buscar con Tor activado</string>
+    <string name="widget_descricao">Caja de búsqueda de Bruma, con acceso directo para activar Tor</string>
+
+    <string name="inicio_procurar">Buscar o escribir dirección</string>
+
+    <string name="endereco_sugestao">Dirección o búsqueda</string>
+    <string name="endereco_procura_com">Buscar con %1$s</string>
+
+    <string name="estado_tor_ligado">Tor activado</string>
+    <string name="estado_tor_a_ligar">Tor conectando, %1$d por ciento</string>
+    <string name="estado_tor_falhou">Tor ha fallado</string>
+    <string name="estado_sem_tor">Tor desactivado</string>
+
+    <string name="acao_mais">Más</string>
+    <string name="acao_privado">Privado</string>
+    <string name="acao_recarregar">Recargar</string>
+    <string name="acao_inicio">Inicio</string>
+    <string name="acao_separadores">Pestañas</string>
+    <string name="acao_novo_separador">Nueva pestaña</string>
+    <string name="acao_ligar_tor">Activar Tor</string>
+    <string name="acao_desligar_tor">Desactivar Tor</string>
+    <string name="acao_fechar_separador">Cerrar pestaña</string>
+    <string name="separador_vazio">Pestaña vacía</string>
+
+    <string name="mais_nova_identidade">Nueva identidad</string>
+    <string name="mais_nova_identidade_detalhe">Circuitos nuevos para todos los sitios</string>
+    <string name="mais_definicoes">Ajustes</string>
+    <string name="mais_limpar">Borrar todo</string>
+    <string name="mais_limpar_detalhe">Cookies, caché, sesiones y pestañas</string>
+    <string name="ublock_instalado">uBlock Origin %1$s</string>
+    <string name="ublock_em_falta">Falta uBlock Origin</string>
+    <string name="ublock_a_instalar">Instalando uBlock Origin…</string>
+
+    <string name="limpar_titulo">¿Borrar todo?</string>
+    <string name="limpar_texto">Cierra todas las pestañas y borra cookies, caché y sesiones. No se puede deshacer.</string>
+    <string name="limpar_confirmar">Borrar</string>
+    <string name="cancelar">Cancelar</string>
+
+    <string name="def_titulo">Ajustes</string>
+    <string name="def_voltar">Atrás</string>
+    <string name="def_seccao_aspeto">Apariencia</string>
+    <string name="def_seccao_busca">Búsqueda</string>
+    <string name="def_seccao_tor">Tor</string>
+    <string name="def_seccao_privacidade">Privacidad</string>
+    <string name="def_seccao_acesso">Acceso a la app</string>
+    <string name="def_fundo">Fondo de inicio</string>
+    <string name="def_fundo_imagem">Imagen elegida</string>
+    <string name="def_fundo_nevoa">Niebla</string>
+    <string name="def_mao">Mano</string>
+    <string name="def_mao_direita">Derecha</string>
+    <string name="def_mao_esquerda">Izquierda</string>
+    <string name="def_rever_guia">Ver la guía otra vez</string>
+    <string name="def_motor">Buscador</string>
+    <string name="def_onion">Preferir .onion con Tor</string>
+    <string name="def_onion_detalhe">Con Tor activado, las búsquedas van por DuckDuckGo onion y nunca salen de la red Tor</string>
+    <string name="def_tor_arranque">Activar Tor al arrancar</string>
+    <string name="def_tor_arranque_detalhe">Sin esto, Tor queda como lo dejaste</string>
+    <string name="def_https">Solo HTTPS</string>
+    <string name="def_https_detalhe">Rechaza conexiones sin cifrar. Los .onion siguen funcionando: ya están cifrados por la propia dirección</string>
+    <string name="def_javascript">JavaScript</string>
+    <string name="def_cookies">Aislar cookies por sitio</string>
+    <string name="def_cookies_detalhe">Una cookie puesta por el mismo rastreador en dos sitios deja de poder vincularlos</string>
+    <string name="def_impressao">Resistir la huella digital</string>
+    <string name="def_impressao_detalhe">Uniforma ventana, zona horaria y tipografías. Protege mucho y rompe algunos sitios</string>
+    <string name="def_limpar_ao_sair">Borrar todo al salir</string>
+    <string name="def_ecra_seguro">Pantalla segura</string>
+    <string name="def_ecra_seguro_detalhe">Deja la app fuera de las capturas y de la lista de apps recientes</string>
+    <string name="def_biometria">Pedir identificación para abrir</string>
+    <string name="def_biometria_detalhe">Huella, rostro o código del teléfono</string>
+    <string name="def_biometria_indisponivel">No disponible: este teléfono no tiene bloqueo de pantalla configurado</string>
+
+    <string name="bloqueio_identificar">Identificar</string>
+    <string name="bloqueio_toca">Toca para identificarte</string>
+    <string name="bloqueio_titulo">Bruma</string>
+    <string name="bloqueio_subtitulo">Identifícate para abrir el navegador</string>
+
+    <string name="guia_saltar">Saltar</string>
+    <string name="guia_seguinte">Siguiente</string>
+    <string name="guia_comecar">Empezar</string>
+    <string name="guia_1_titulo">bruma</string>
+    <string name="guia_1_texto">Un navegador para una sola mano.\n\nTor integrado, sin necesidad de ninguna otra app, y el uBlock Origin de verdad bloqueando anuncios y rastreadores.</string>
+    <string name="guia_2_titulo">La cápsula</string>
+    <string name="guia_2_texto">No hay barra arriba ni abajo. Hay una cápsula al lado de tu mano, a la altura del pulgar.\n\nEl punto de arriba te lo dice todo: morado es Tor activado, gris es conexión cifrada, rojo es sin cifrar.</string>
+    <string name="guia_3_titulo">Los gestos</string>
+    <string name="guia_3_texto">Toca para abrir la caja de dirección.\n\nArrastra arriba o abajo para cambiar de pestaña.\n\nArrastra hacia dentro para las acciones. Hacia fuera esconde la cápsula, para leer sin nada delante.</string>
+    <string name="guia_4_titulo">Tor</string>
+    <string name="guia_4_texto">El escudo de las acciones activa Tor. A partir de ahí el tráfico sale por la red Tor, las direcciones .onion funcionan y las búsquedas pasan por DuckDuckGo onion.\n\nNo es el Tor Browser: esconde desde dónde estás, pero no te hace igual a todo el mundo.</string>
+
+    <string name="aviso_tor_pronto">Tor listo</string>
+    <string name="aviso_tor_falhou">Tor ha fallado: %1$s</string>
+    <string name="aviso_tor_para_onion">Activando Tor para abrir este .onion…</string>
+    <string name="aviso_a_espera_tor">Esperando a Tor…</string>
+    <string name="aviso_nova_identidade">Circuitos nuevos solicitados</string>
+    <string name="aviso_tudo_apagado">Todo borrado: cookies, caché y sesiones</string>
+    <string name="aviso_esquema_recusado">Enlace externo rechazado: %1$s://…</string>
+    <string name="aviso_media_recusado">Petición de cámara/micrófono rechazada</string>
+
+    <string name="erro_onion_sem_tor">Servicio onion inaccesible: ¿está Tor activado?</string>
+    <string name="erro_anfitriao">Servidor desconocido</string>
+    <string name="erro_proxy">El proxy rechazó la conexión: ¿se ha caído Tor?</string>
+    <string name="erro_tempo">La conexión ha agotado el tiempo</string>
+    <string name="erro_certificado">Certificado no válido</string>
+    <string name="erro_https">Solo HTTPS: este sitio no lo ofrece</string>
+    <string name="erro_generico">No se ha podido abrir la página</string>
+    <string name="def_idioma">Idioma</string>
+</resources>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="canal_tor_descricao">内置 Tor 客户端状态</string>
+
+    <string name="widget_procurar">用 Bruma 搜索</string>
+    <string name="widget_com_tor">开启 Tor 后搜索</string>
+    <string name="widget_descricao">Bruma 搜索框，附带开启 Tor 的快捷方式</string>
+
+    <string name="inicio_procurar">搜索或输入网址</string>
+
+    <string name="endereco_sugestao">网址或搜索内容</string>
+    <string name="endereco_procura_com">使用 %1$s 搜索</string>
+
+    <string name="estado_tor_ligado">Tor 已开启</string>
+    <string name="estado_tor_a_ligar">Tor 连接中，%1$d%%</string>
+    <string name="estado_tor_falhou">Tor 连接失败</string>
+    <string name="estado_sem_tor">Tor 已关闭</string>
+
+    <string name="acao_mais">更多</string>
+    <string name="acao_privado">隐私标签页</string>
+    <string name="acao_recarregar">重新载入</string>
+    <string name="acao_inicio">主页</string>
+    <string name="acao_separadores">标签页</string>
+    <string name="acao_novo_separador">新建标签页</string>
+    <string name="acao_ligar_tor">开启 Tor</string>
+    <string name="acao_desligar_tor">关闭 Tor</string>
+    <string name="acao_fechar_separador">关闭标签页</string>
+    <string name="separador_vazio">空白标签页</string>
+
+    <string name="mais_nova_identidade">新身份</string>
+    <string name="mais_nova_identidade_detalhe">为所有网站重建线路</string>
+    <string name="mais_definicoes">设置</string>
+    <string name="mais_limpar">清除全部</string>
+    <string name="mais_limpar_detalhe">Cookie、缓存、会话与标签页</string>
+    <string name="ublock_instalado">uBlock Origin %1$s</string>
+    <string name="ublock_em_falta">缺少 uBlock Origin</string>
+    <string name="ublock_a_instalar">正在安装 uBlock Origin…</string>
+
+    <string name="limpar_titulo">要清除全部吗？</string>
+    <string name="limpar_texto">将关闭所有标签页，并删除 Cookie、缓存与会话。此操作无法撤销。</string>
+    <string name="limpar_confirmar">清除</string>
+    <string name="cancelar">取消</string>
+
+    <string name="def_titulo">设置</string>
+    <string name="def_voltar">返回</string>
+    <string name="def_seccao_aspeto">外观</string>
+    <string name="def_seccao_busca">搜索</string>
+    <string name="def_seccao_tor">Tor</string>
+    <string name="def_seccao_privacidade">隐私</string>
+    <string name="def_seccao_acesso">应用访问</string>
+    <string name="def_fundo">主页背景</string>
+    <string name="def_fundo_imagem">已选图片</string>
+    <string name="def_fundo_nevoa">薄雾</string>
+    <string name="def_mao">惯用手</string>
+    <string name="def_mao_direita">右手</string>
+    <string name="def_mao_esquerda">左手</string>
+    <string name="def_rever_guia">再看一次导览</string>
+    <string name="def_motor">搜索引擎</string>
+    <string name="def_onion">开启 Tor 时优先使用 .onion</string>
+    <string name="def_onion_detalhe">开启 Tor 后，搜索会经由 DuckDuckGo onion，全程不离开 Tor 网络</string>
+    <string name="def_tor_arranque">启动时开启 Tor</string>
+    <string name="def_tor_arranque_detalhe">不开启此项时，Tor 会保持你上次离开时的状态</string>
+    <string name="def_https">仅使用 HTTPS</string>
+    <string name="def_https_detalhe">拒绝明文连接。.onion 网站仍可使用——其地址本身已提供加密</string>
+    <string name="def_javascript">JavaScript</string>
+    <string name="def_cookies">按网站隔离 Cookie</string>
+    <string name="def_cookies_detalhe">同一追踪器在两个网站写入的 Cookie 将无法再把它们关联起来</string>
+    <string name="def_impressao">抵抗指纹追踪</string>
+    <string name="def_impressao_detalhe">统一窗口尺寸、时区与字体。保护效果很强，但会让部分网站出错</string>
+    <string name="def_limpar_ao_sair">退出时清除全部</string>
+    <string name="def_ecra_seguro">安全屏幕</string>
+    <string name="def_ecra_seguro_detalhe">使本应用不出现在截图与最近任务列表中</string>
+    <string name="def_biometria">打开前需要身份验证</string>
+    <string name="def_biometria_detalhe">指纹、面容或手机密码</string>
+    <string name="def_biometria_indisponivel">不可用：此手机尚未设置屏幕锁</string>
+
+    <string name="bloqueio_identificar">验证身份</string>
+    <string name="bloqueio_toca">轻触以验证身份</string>
+    <string name="bloqueio_titulo">Bruma</string>
+    <string name="bloqueio_subtitulo">验证身份以打开浏览器</string>
+
+    <string name="guia_saltar">跳过</string>
+    <string name="guia_seguinte">下一步</string>
+    <string name="guia_comecar">开始使用</string>
+    <string name="guia_1_titulo">bruma</string>
+    <string name="guia_1_texto">一款单手使用的浏览器。\n\n内置 Tor，无需安装其他应用；并搭载真正的 uBlock Origin，拦截广告与追踪器。</string>
+    <string name="guia_2_titulo">胶囊</string>
+    <string name="guia_2_texto">顶部和底部都没有工具栏。取而代之的是一枚胶囊，位于你惯用手的一侧，正好在拇指高度。\n\n顶端的圆点说明一切：紫色代表 Tor 已开启，灰色代表连接已加密，红色代表未加密。</string>
+    <string name="guia_3_titulo">手势</string>
+    <string name="guia_3_texto">轻触打开地址栏。\n\n上下拖动切换标签页。\n\n向内拖动打开操作列表；向外拖动收起胶囊，让阅读时眼前毫无遮挡。</string>
+    <string name="guia_4_titulo">Tor</string>
+    <string name="guia_4_texto">操作列表中的盾牌用于开启 Tor。开启后流量将经由 Tor 网络传输，.onion 地址可以访问，搜索也会走 DuckDuckGo onion。\n\n这并不是 Tor Browser：它能隐藏你所在的位置，却无法让你看起来与其他人一模一样。</string>
+
+    <string name="aviso_tor_pronto">Tor 已就绪</string>
+    <string name="aviso_tor_falhou">Tor 失败：%1$s</string>
+    <string name="aviso_tor_para_onion">正在开启 Tor 以打开此 .onion 地址…</string>
+    <string name="aviso_a_espera_tor">正在等待 Tor…</string>
+    <string name="aviso_nova_identidade">已请求新线路</string>
+    <string name="aviso_tudo_apagado">已清除：Cookie、缓存与会话</string>
+    <string name="aviso_esquema_recusado">已拒绝外部链接：%1$s://…</string>
+    <string name="aviso_media_recusado">已拒绝摄像头/麦克风请求</string>
+
+    <string name="erro_onion_sem_tor">无法访问该 onion 服务——Tor 开启了吗？</string>
+    <string name="erro_anfitriao">未知主机</string>
+    <string name="erro_proxy">代理拒绝了连接——Tor 是否已断开？</string>
+    <string name="erro_tempo">连接超时</string>
+    <string name="erro_certificado">证书无效</string>
+    <string name="erro_https">仅使用 HTTPS：此网站不支持</string>
+    <string name="erro_generico">无法打开此页面</string>
+    <string name="def_idioma">语言</string>
+</resources>

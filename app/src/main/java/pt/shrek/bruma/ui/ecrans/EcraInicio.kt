@@ -19,6 +19,8 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import pt.shrek.bruma.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
@@ -130,7 +132,7 @@ fun EcraInicio(motor: MotorBusca, naDireita: Boolean, aoTocarNaBusca: () -> Unit
                     modifier = Modifier.size(19.dp),
                 )
                 Text(
-                    "Procurar ou escrever endereço",
+                    stringResource(R.string.inicio_procurar),
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White.copy(alpha = 0.55f),
                     modifier = Modifier.padding(start = 14.dp),

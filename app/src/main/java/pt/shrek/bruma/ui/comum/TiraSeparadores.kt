@@ -21,6 +21,8 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import pt.shrek.bruma.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -108,7 +110,7 @@ private fun Cartao(
         if (separador.privado) {
             Icon(
                 Icons.Default.VisibilityOff,
-                contentDescription = "Privado",
+                contentDescription = stringResource(R.string.acao_privado),
                 tint = CoresEstado.tor,
                 modifier = Modifier.size(13.dp).padding(end = 1.dp),
             )

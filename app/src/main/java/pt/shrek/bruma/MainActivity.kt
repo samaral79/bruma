@@ -1,5 +1,6 @@
 package pt.shrek.bruma
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
@@ -13,9 +14,11 @@ import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
 import pt.shrek.bruma.core.Definicoes
+import pt.shrek.bruma.core.Idiomas
 import pt.shrek.bruma.ui.NavegadorViewModel
 import pt.shrek.bruma.ui.ecrans.EcraBloqueio
 import pt.shrek.bruma.ui.ecrans.EcraGuia
+import pt.shrek.bruma.ui.ecrans.EcraIdioma
 import pt.shrek.bruma.ui.ecrans.EcraNavegador
 import pt.shrek.bruma.ui.ecrans.podeAutenticar
 import pt.shrek.bruma.ui.tema.TemaBruma
@@ -26,6 +29,18 @@ import pt.shrek.bruma.ui.tema.TemaBruma
  * fragmentos e sobreviver a rotações do ecrã a meio da autenticação.
  */
 class MainActivity : FragmentActivity() {
+
+    /**
+     * O idioma escolhido é aplicado aqui, antes de existir qualquer vista.
+     *
+     * É o único ponto em que se consegue trocar a língua de todos os recursos da
+     * atividade: a partir de `onCreate` os `Resources` já estão presos à
+     * configuração com que a atividade nasceu, e mudá-la depois só teria efeito
+     * na próxima. Daí a troca de idioma nas Definições chamar `recreate()`.
+     */
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(Idiomas.aplicar(base))
+    }
 
     private val vm: NavegadorViewModel by viewModels()
 
@@ -68,9 +83,16 @@ class MainActivity : FragmentActivity() {
                     !desbloqueado
 
                 when {
-                    // O guia vem primeiro: explica a app a quem acabou de a
-                    // instalar, e não mostra conteúdo nenhum que precise de
-                    // estar protegido pela identificação.
+                    // O idioma antes de tudo: o guia é texto, e explicar a app
+                    // numa língua que a pessoa não lê não explica nada.
+                    !Idiomas.jaEscolheu(this@MainActivity) -> EcraIdioma { idioma ->
+                        Idiomas.guardar(this@MainActivity, idioma)
+                        // Recriar para os recursos nascerem já no idioma novo.
+                        recreate()
+                    }
+
+                    // Depois o guia, que não mostra conteúdo nenhum a precisar
+                    // da proteção da identificação.
                     !definicoes.guiaVisto -> EcraGuia(
                         mao = definicoes.mao,
                         aoTerminar = { definicoes.guiaVisto = true },

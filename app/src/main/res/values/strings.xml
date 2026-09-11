@@ -1,9 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Default language: English. European Portuguese lives in values-pt/.
+     English is the default because the app ships worldwide; a Portuguese phone
+     picks up values-pt automatically. -->
 <resources>
     <string name="app_name">Bruma</string>
+
+    <!-- Tor foreground service notification channel -->
     <string name="canal_tor_nome">Tor</string>
-    <string name="canal_tor_descricao">Estado do cliente Tor embutido</string>
-    <string name="widget_procurar">Procurar com a Bruma</string>
-    <string name="widget_com_tor">Procurar com o tor ligado</string>
-    <string name="widget_descricao">Caixa de pesquisa da Bruma, com atalho para ligar o tor</string>
+    <string name="canal_tor_descricao">Status of the built-in Tor client</string>
+
+    <!-- Home screen widget -->
+    <string name="widget_procurar">Search with Bruma</string>
+    <string name="widget_com_tor">Search with Tor on</string>
+    <string name="widget_descricao">Bruma search box, with a shortcut to turn Tor on</string>
+
+    <!-- Home screen -->
+    <string name="inicio_procurar">Search or type address</string>
+
+    <!-- Address bar -->
+    <string name="endereco_sugestao">Address or search</string>
+    <string name="endereco_procura_com">Search with %1$s</string>
+
+    <!-- Side capsule, spoken by screen readers -->
+    <string name="estado_tor_ligado">Tor on</string>
+    <string name="estado_tor_a_ligar">Tor connecting, %1$d percent</string>
+    <string name="estado_tor_falhou">Tor failed</string>
+    <string name="estado_sem_tor">Tor off</string>
+
+    <!-- Actions -->
+    <string name="acao_mais">More</string>
+    <string name="acao_privado">Private</string>
+    <string name="acao_recarregar">Reload</string>
+    <string name="acao_inicio">Home</string>
+    <string name="acao_separadores">Tabs</string>
+    <string name="acao_novo_separador">New tab</string>
+    <string name="acao_ligar_tor">Turn Tor on</string>
+    <string name="acao_desligar_tor">Turn Tor off</string>
+    <string name="acao_fechar_separador">Close tab</string>
+    <string name="separador_vazio">Empty tab</string>
+
+    <!-- More sheet -->
+    <string name="mais_nova_identidade">New identity</string>
+    <string name="mais_nova_identidade_detalhe">Fresh circuits for every site</string>
+    <string name="mais_definicoes">Settings</string>
+    <string name="mais_limpar">Clear everything</string>
+    <string name="mais_limpar_detalhe">Cookies, cache, sessions and tabs</string>
+    <string name="ublock_instalado">uBlock Origin %1$s</string>
+    <string name="ublock_em_falta">uBlock Origin missing</string>
+    <string name="ublock_a_instalar">Installing uBlock Origin…</string>
+
+    <!-- Clear confirmation -->
+    <string name="limpar_titulo">Clear everything?</string>
+    <string name="limpar_texto">Closes every tab and deletes cookies, cache and sessions. This cannot be undone.</string>
+    <string name="limpar_confirmar">Clear</string>
+    <string name="cancelar">Cancel</string>
+
+    <!-- Settings -->
+    <string name="def_titulo">Settings</string>
+    <string name="def_voltar">Back</string>
+    <string name="def_seccao_aspeto">Appearance</string>
+    <string name="def_seccao_busca">Search</string>
+    <string name="def_seccao_tor">Tor</string>
+    <string name="def_seccao_privacidade">Privacy</string>
+    <string name="def_seccao_acesso">App access</string>
+    <string name="def_fundo">Home background</string>
+    <string name="def_fundo_imagem">Chosen image</string>
+    <string name="def_fundo_nevoa">Mist</string>
+    <string name="def_mao">Hand</string>
+    <string name="def_mao_direita">Right</string>
+    <string name="def_mao_esquerda">Left</string>
+    <string name="def_rever_guia">Show the guide again</string>
+    <string name="def_motor">Search engine</string>
+    <string name="def_onion">Prefer .onion with Tor</string>
+    <string name="def_onion_detalhe">With Tor on, searches go through DuckDuckGo onion and never leave the Tor network</string>
+    <string name="def_tor_arranque">Turn Tor on at startup</string>
+    <string name="def_tor_arranque_detalhe">Without this, Tor stays however you left it</string>
+    <string name="def_https">HTTPS only</string>
+    <string name="def_https_detalhe">Refuses cleartext connections. .onion sites keep working — they are already encrypted by the address itself</string>
+    <string name="def_javascript">JavaScript</string>
+    <string name="def_cookies">Isolate cookies per site</string>
+    <string name="def_cookies_detalhe">A cookie set by the same tracker on two sites can no longer link them</string>
+    <string name="def_impressao">Resist fingerprinting</string>
+    <string name="def_impressao_detalhe">Uniforms window size, time zone and fonts. Protects a lot and breaks some sites</string>
+    <string name="def_limpar_ao_sair">Clear everything on exit</string>
+    <string name="def_ecra_seguro">Secure screen</string>
+    <string name="def_ecra_seguro_detalhe">Keeps the app out of screenshots and the recent apps list</string>
+    <string name="def_biometria">Ask for identification to open</string>
+    <string name="def_biometria_detalhe">Fingerprint, face or phone passcode</string>
+    <string name="def_biometria_indisponivel">Unavailable: this phone has no screen lock set up</string>
+
+    <!-- Lock screen -->
+    <string name="bloqueio_identificar">Identify</string>
+    <string name="bloqueio_toca">Tap to identify yourself</string>
+    <string name="bloqueio_titulo">Bruma</string>
+    <string name="bloqueio_subtitulo">Identify yourself to open the browser</string>
+
+    <!-- Welcome guide -->
+    <string name="guia_saltar">Skip</string>
+    <string name="guia_seguinte">Next</string>
+    <string name="guia_comecar">Start</string>
+    <string name="guia_1_titulo">bruma</string>
+    <string name="guia_1_texto">A browser for one hand.\n\nTor built in, with no other app needed, and the real uBlock Origin blocking ads and trackers.</string>
+    <string name="guia_2_titulo">The capsule</string>
+    <string name="guia_2_texto">There is no bar at the top or the bottom. There is a capsule on the side of your hand, at thumb height.\n\nThe dot on top tells you everything: purple is Tor on, grey is an encrypted connection, red is no encryption.</string>
+    <string name="guia_3_titulo">The gestures</string>
+    <string name="guia_3_texto">Tap to open the address box.\n\nDrag up or down to switch tabs.\n\nDrag inwards for the actions. Drag outwards to hide the capsule and read with nothing in the way.</string>
+    <string name="guia_4_titulo">Tor</string>
+    <string name="guia_4_texto">The shield in the actions turns Tor on. From then on traffic leaves through the Tor network, .onion addresses work, and searches go through DuckDuckGo onion.\n\nThis is not the Tor Browser: it hides where you are, but it does not make you look like everyone else.</string>
+
+    <!-- Messages -->
+    <string name="aviso_tor_pronto">Tor ready</string>
+    <string name="aviso_tor_falhou">Tor failed: %1$s</string>
+    <string name="aviso_tor_para_onion">Turning Tor on to open this .onion…</string>
+    <string name="aviso_a_espera_tor">Waiting for Tor…</string>
+    <string name="aviso_nova_identidade">New circuits requested</string>
+    <string name="aviso_tudo_apagado">Everything cleared: cookies, cache and sessions</string>
+    <string name="aviso_esquema_recusado">External link refused: %1$s://…</string>
+    <string name="aviso_media_recusado">Camera/microphone request refused</string>
+
+    <!-- Page load errors -->
+    <string name="erro_onion_sem_tor">Onion service unreachable — is Tor on?</string>
+    <string name="erro_anfitriao">Unknown host</string>
+    <string name="erro_proxy">The proxy refused the connection — did Tor drop?</string>
+    <string name="erro_tempo">The connection timed out</string>
+    <string name="erro_certificado">Invalid certificate</string>
+    <string name="erro_https">HTTPS only: this site does not offer it</string>
+    <string name="erro_generico">Could not open the page</string>
+    <string name="def_idioma">Language</string>
 </resources>

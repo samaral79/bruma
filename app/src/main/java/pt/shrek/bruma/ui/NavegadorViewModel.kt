@@ -10,6 +10,7 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import pt.shrek.bruma.R
 import pt.shrek.bruma.core.Definicoes
 import pt.shrek.bruma.core.Endereco
 import pt.shrek.bruma.core.ModoTor
@@ -38,7 +39,7 @@ class NavegadorViewModel(aplicacao: Application) : AndroidViewModel(aplicacao) {
     )
     val avisos: SharedFlow<String> = _avisos
 
-    val separadores = GestorSeparadores(MotorGecko.runtime) { aviso -> avisar(aviso) }
+    val separadores = GestorSeparadores(aplicacao, MotorGecko.runtime) { aviso -> avisar(aviso) }
 
     val estadoTor = MotorTor.estado
     val estadoUblock = MotorGecko.ublock
@@ -104,7 +105,7 @@ class NavegadorViewModel(aplicacao: Application) : AndroidViewModel(aplicacao) {
                             destinoPendente = null
                             ativo?.abrir(pendente)
                         } else {
-                            avisar("Tor pronto")
+                            avisar(texto(R.string.aviso_tor_pronto))
                         }
                     }
                     is EstadoTor.ALigar ->
@@ -117,7 +118,7 @@ class NavegadorViewModel(aplicacao: Application) : AndroidViewModel(aplicacao) {
                         }
                     is EstadoTor.Falhou -> {
                         MotorGecko.suspenderRedeAteTor()
-                        avisar("Tor falhou: ${estado.causa}")
+                        avisar(texto(R.string.aviso_tor_falhou, estado.causa))
                     }
                     EstadoTor.Desligado ->
                         if (definicoes.modoTor == ModoTor.DESLIGADO) MotorGecko.aplicarProxy(null)
@@ -149,10 +150,10 @@ class NavegadorViewModel(aplicacao: Application) : AndroidViewModel(aplicacao) {
             folha = Folha.NENHUMA
             lequeAberto = false
             if (Endereco.ehOnion(destino)) {
-                avisar("A ligar o tor para abrir este .onion…")
+                avisar(texto(R.string.aviso_tor_para_onion))
                 ligarTor()
             } else {
-                avisar("À espera do tor…")
+                avisar(texto(R.string.aviso_a_espera_tor))
                 if (definicoes.modoTor != ModoTor.LIGADO) ligarTor()
             }
             return
@@ -212,7 +213,7 @@ class NavegadorViewModel(aplicacao: Application) : AndroidViewModel(aplicacao) {
 
     fun novaIdentidade() {
         MotorTor.novaIdentidade()
-        avisar("Circuitos novos pedidos")
+        avisar(texto(R.string.aviso_nova_identidade))
         recarregar()
     }
 
@@ -274,9 +275,13 @@ class NavegadorViewModel(aplicacao: Application) : AndroidViewModel(aplicacao) {
         MotorGecko.runtime.storageController.clearData(
             org.mozilla.geckoview.StorageController.ClearFlags.ALL
         )
-        avisar("Tudo apagado: cookies, cache e sessões")
+        avisar(texto(R.string.aviso_tudo_apagado))
         folha = Folha.NENHUMA
     }
+
+    /** Atalho para ir buscar um texto traduzido sem repetir o contexto. */
+    private fun texto(id: Int, vararg argumentos: Any): String =
+        getApplication<Application>().getString(id, *argumentos)
 
     fun avisar(texto: String) {
         viewModelScope.launch { _avisos.emit(texto) }

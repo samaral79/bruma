@@ -1,5 +1,6 @@
 package pt.shrek.bruma.navegador
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -11,6 +12,7 @@ import org.mozilla.geckoview.GeckoResult
 import org.mozilla.geckoview.GeckoRuntime
 import org.mozilla.geckoview.GeckoSession
 import org.mozilla.geckoview.GeckoSessionSettings
+import pt.shrek.bruma.R
 import pt.shrek.bruma.core.Endereco
 
 /** O que a barra precisa de saber sobre a segurança da ligação. */
@@ -26,6 +28,10 @@ enum class Seguranca { NENHUMA, CIFRADA, ONION }
 class Separador(
     val id: Long,
     val privado: Boolean,
+    // Precisa de contexto para traduzir as mensagens de erro. É o contexto da
+    // aplicação, não o da atividade: um separador sobrevive a rotações e a
+    // atividade não.
+    private val contexto: Context,
     private val runtime: GeckoRuntime,
     private val aoPedirNovoSeparador: (String) -> Unit,
     private val aoAvisar: (String) -> Unit,
@@ -57,7 +63,8 @@ class Separador(
     )
 
     val etiqueta: String
-        get() = titulo.ifBlank { Endereco.paraMostrar(url) }.ifBlank { "Separador vazio" }
+        get() = titulo.ifBlank { Endereco.paraMostrar(url) }
+            .ifBlank { contexto.getString(R.string.separador_vazio) }
 
     init {
         sessao.navigationDelegate = object : GeckoSession.NavigationDelegate {
@@ -104,7 +111,7 @@ class Separador(
                 // tg://) tiram o tráfego de dentro do tor sem aviso e revelam
                 // ao sítio que apps estão instaladas. Não se seguem.
                 if (esquema !in ESQUEMAS_PERMITIDOS) {
-                    aoAvisar("Ligação externa recusada: $esquema://…")
+                    aoAvisar(contexto.getString(R.string.aviso_esquema_recusado, esquema))
                     return GeckoResult.fromValue(AllowOrDeny.DENY)
                 }
                 return GeckoResult.fromValue(AllowOrDeny.ALLOW)
@@ -196,7 +203,7 @@ class Separador(
                 audio: Array<out GeckoSession.PermissionDelegate.MediaSource>?,
                 callback: GeckoSession.PermissionDelegate.MediaCallback,
             ) {
-                aoAvisar("Pedido de câmara/microfone recusado")
+                aoAvisar(contexto.getString(R.string.aviso_media_recusado))
                 callback.reject()
             }
         }
@@ -236,17 +243,18 @@ class Separador(
         }.onFailure { Log.w(TAG, "falha a fechar sessão", it) }
     }
 
-    private fun descreverErro(erro: org.mozilla.geckoview.WebRequestError): String = when (erro.code) {
-        org.mozilla.geckoview.WebRequestError.ERROR_UNKNOWN_HOST ->
-            if (Endereco.ehOnion(url)) "Serviço onion inacessível — o tor está ligado?"
-            else "Anfitrião desconhecido"
-        org.mozilla.geckoview.WebRequestError.ERROR_PROXY_CONNECTION_REFUSED ->
-            "O proxy recusou a ligação — o tor caiu?"
-        org.mozilla.geckoview.WebRequestError.ERROR_NET_TIMEOUT -> "A ligação esgotou o tempo"
-        org.mozilla.geckoview.WebRequestError.ERROR_SECURITY_SSL -> "Certificado inválido"
-        org.mozilla.geckoview.WebRequestError.ERROR_HTTPS_ONLY -> "Só HTTPS: este sítio não o oferece"
-        else -> "Não foi possível abrir a página"
-    }
+    private fun descreverErro(erro: org.mozilla.geckoview.WebRequestError): String =
+        contexto.getString(
+            when (erro.code) {
+                org.mozilla.geckoview.WebRequestError.ERROR_UNKNOWN_HOST ->
+                    if (Endereco.ehOnion(url)) R.string.erro_onion_sem_tor else R.string.erro_anfitriao
+                org.mozilla.geckoview.WebRequestError.ERROR_PROXY_CONNECTION_REFUSED -> R.string.erro_proxy
+                org.mozilla.geckoview.WebRequestError.ERROR_NET_TIMEOUT -> R.string.erro_tempo
+                org.mozilla.geckoview.WebRequestError.ERROR_SECURITY_SSL -> R.string.erro_certificado
+                org.mozilla.geckoview.WebRequestError.ERROR_HTTPS_ONLY -> R.string.erro_https
+                else -> R.string.erro_generico
+            }
+        )
 
     private companion object {
         const val TAG = "Bruma.Separador"

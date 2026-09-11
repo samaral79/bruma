@@ -27,6 +27,8 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import pt.shrek.bruma.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -90,15 +92,18 @@ fun LequeAcoes(
     // De cima para baixo na coluna; o último da lista é o que fica mais perto
     // da cápsula, e por isso o mais fácil de alcançar.
     val acoes = listOf(
-        Acao(Icons.Default.MoreHoriz, "Mais", aoMais),
-        Acao(Icons.Default.VisibilityOff, "Privado", aoNovoPrivado),
-        Acao(Icons.Default.Refresh, "Recarregar", aoRecarregar),
-        Acao(Icons.Default.Home, "Início", aoInicio),
-        Acao(Icons.Default.Layers, "Separadores", aoSeparadores),
-        Acao(Icons.Default.Add, "Novo separador", aoNovoSeparador),
+        Acao(Icons.Default.MoreHoriz, stringResource(R.string.acao_mais), aoMais),
+        Acao(Icons.Default.VisibilityOff, stringResource(R.string.acao_privado), aoNovoPrivado),
+        Acao(Icons.Default.Refresh, stringResource(R.string.acao_recarregar), aoRecarregar),
+        Acao(Icons.Default.Home, stringResource(R.string.acao_inicio), aoInicio),
+        Acao(Icons.Default.Layers, stringResource(R.string.acao_separadores), aoSeparadores),
+        Acao(Icons.Default.Add, stringResource(R.string.acao_novo_separador), aoNovoSeparador),
         Acao(
             Icons.Default.Shield,
-            if (estadoTor is EstadoTor.Pronto) "Desligar tor" else "Ligar tor",
+            stringResource(
+                if (estadoTor is EstadoTor.Pronto) R.string.acao_desligar_tor
+                else R.string.acao_ligar_tor
+            ),
             aoAlternarTor,
             destaque = true,
         ),

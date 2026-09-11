@@ -27,6 +27,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import pt.shrek.bruma.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +41,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import pt.shrek.bruma.core.Definicoes
 import pt.shrek.bruma.core.Fundo
+import pt.shrek.bruma.core.Idioma
+import pt.shrek.bruma.core.Idiomas
 import pt.shrek.bruma.core.Mao
 import pt.shrek.bruma.core.MotorBusca
 
@@ -84,9 +88,12 @@ fun EcraDefinicoes(
             contentPadding = WindowInsets.navigationBars.asPaddingValues(),
             modifier = Modifier.fillMaxWidth(),
         ) {
-            item { Seccao("Aspeto") }
+            item { Seccao(stringResource(R.string.def_seccao_aspeto)) }
             item {
-                Escolha("Fundo do início", if (temFundo) "Imagem escolhida" else "Névoa") {
+                Escolha(
+                    stringResource(R.string.def_fundo),
+                    stringResource(if (temFundo) R.string.def_fundo_imagem else R.string.def_fundo_nevoa),
+                ) {
                     if (temFundo) {
                         // Segundo toque devolve o fundo desenhado: sem isto não
                         // havia forma de desfazer a escolha de uma imagem.
@@ -99,22 +106,38 @@ fun EcraDefinicoes(
                 }
             }
             item {
-                Escolha("Mão", if (definicoes.mao == Mao.DIREITA) "Direita" else "Esquerda") {
+                Escolha(
+                    stringResource(R.string.def_mao),
+                    stringResource(if (definicoes.mao == Mao.DIREITA) R.string.def_mao_direita else R.string.def_mao_esquerda),
+                ) {
                     definicoes.mao = if (definicoes.mao == Mao.DIREITA) Mao.ESQUERDA else Mao.DIREITA
                     aoMudar()
                 }
             }
 
             item {
-                Escolha("Ver o guia outra vez", "") {
+                // Mudar de idioma obriga a recriar a atividade: os recursos são
+                // presos à configuração com que ela nasceu.
+                Escolha(
+                    stringResource(R.string.def_idioma),
+                    (Idiomas.escolhido(contexto) ?: Idiomas.sugestaoDoSistema(contexto)).etiqueta,
+                ) {
+                    val todos = Idioma.entries
+                    val atual = Idiomas.escolhido(contexto) ?: Idiomas.sugestaoDoSistema(contexto)
+                    Idiomas.guardar(contexto, todos[(todos.indexOf(atual) + 1) % todos.size])
+                    (contexto as? android.app.Activity)?.recreate()
+                }
+            }
+            item {
+                Escolha(stringResource(R.string.def_rever_guia), "") {
                     definicoes.guiaVisto = false
                     aoSair()
                 }
             }
 
-            item { Seccao("Busca") }
+            item { Seccao(stringResource(R.string.def_seccao_busca)) }
             item {
-                Escolha("Motor de busca", definicoes.motorBusca.etiqueta) {
+                Escolha(stringResource(R.string.def_motor), definicoes.motorBusca.etiqueta) {
                     val todos = MotorBusca.entries
                     definicoes.motorBusca = todos[(todos.indexOf(definicoes.motorBusca) + 1) % todos.size]
                     aoMudar()
@@ -122,70 +145,72 @@ fun EcraDefinicoes(
             }
             item {
                 Interruptor(
-                    "Preferir .onion com tor",
-                    "Com o tor ligado, a busca vai pelo DuckDuckGo onion e nunca sai da rede tor",
+                    stringResource(R.string.def_onion),
+                    stringResource(R.string.def_onion_detalhe),
                     definicoes.preferirOnionComTor,
                 ) { definicoes.preferirOnionComTor = it; aoMudar() }
             }
 
-            item { Seccao("Tor") }
+            item { Seccao(stringResource(R.string.def_seccao_tor)) }
             item {
                 Interruptor(
-                    "Ligar o tor ao arrancar",
-                    "Sem isto, o tor fica como o deixaste da última vez",
+                    stringResource(R.string.def_tor_arranque),
+                    stringResource(R.string.def_tor_arranque_detalhe),
                     definicoes.torAoArrancar,
                 ) {
                     definicoes.torAoArrancar = it; aoMudar()
                 }
             }
 
-            item { Seccao("Privacidade") }
+            item { Seccao(stringResource(R.string.def_seccao_privacidade)) }
             item {
                 Interruptor(
-                    "Só HTTPS",
-                    "Recusa ligações em claro. Os .onion continuam a funcionar — já são cifrados pelo endereço",
+                    stringResource(R.string.def_https),
+                    stringResource(R.string.def_https_detalhe),
                     definicoes.apenasHttps,
                 ) { definicoes.apenasHttps = it; aoMudar() }
             }
             item {
-                Interruptor("JavaScript", null, definicoes.javascript) {
+                Interruptor(stringResource(R.string.def_javascript), null, definicoes.javascript) {
                     definicoes.javascript = it; aoMudar()
                 }
             }
             item {
                 Interruptor(
-                    "Isolar cookies por sítio",
-                    "Um cookie posto pelo mesmo rastreador em dois sítios deixa de os poder ligar",
+                    stringResource(R.string.def_cookies),
+                    stringResource(R.string.def_cookies_detalhe),
                     definicoes.isolarCookies,
                 ) { definicoes.isolarCookies = it; aoMudar() }
             }
             item {
                 Interruptor(
-                    "Resistir à impressão digital",
-                    "Uniformiza janela, fuso e tipos de letra. Protege muito e parte alguns sítios",
+                    stringResource(R.string.def_impressao),
+                    stringResource(R.string.def_impressao_detalhe),
                     definicoes.resistirImpressaoDigital,
                 ) { definicoes.resistirImpressaoDigital = it; aoMudar() }
             }
             item {
-                Interruptor("Limpar tudo ao sair", null, definicoes.limparAoSair) {
+                Interruptor(stringResource(R.string.def_limpar_ao_sair), null, definicoes.limparAoSair) {
                     definicoes.limparAoSair = it; aoMudar()
                 }
             }
 
-            item { Seccao("Acesso à app") }
+            item { Seccao(stringResource(R.string.def_seccao_acesso)) }
             item {
                 Interruptor(
-                    "Ecrã seguro",
-                    "Tira a app das capturas de ecrã e da lista de apps recentes",
+                    stringResource(R.string.def_ecra_seguro),
+                    stringResource(R.string.def_ecra_seguro_detalhe),
                     definicoes.ecraSeguro,
                 ) { definicoes.ecraSeguro = it; aoMudar() }
             }
             item {
                 val temSensor = podeAutenticar(contexto)
                 Interruptor(
-                    "Pedir identificação para abrir",
-                    if (temSensor) "Impressão digital, rosto ou código do telemóvel"
-                    else "Indisponível: este telemóvel não tem bloqueio de ecrã configurado",
+                    stringResource(R.string.def_biometria),
+                    stringResource(
+                        if (temSensor) R.string.def_biometria_detalhe
+                        else R.string.def_biometria_indisponivel
+                    ),
                     definicoes.pedirBiometria && temSensor,
                     ativo = temSensor,
                 ) { definicoes.pedirBiometria = it; aoMudar() }
@@ -209,12 +234,12 @@ private fun Cabecalho(aoSair: () -> Unit) {
         ) {
             Icon(
                 Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Voltar",
+                contentDescription = stringResource(R.string.def_voltar),
                 tint = MaterialTheme.colorScheme.onSurface,
             )
         }
         Text(
-            "Definições",
+            stringResource(R.string.def_titulo),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(start = 6.dp),

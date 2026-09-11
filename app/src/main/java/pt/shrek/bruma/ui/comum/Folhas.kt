@@ -34,6 +34,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
+import pt.shrek.bruma.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -116,7 +118,7 @@ fun FolhaEndereco(
                 .heightIn(min = 72.dp)
                 .focusRequester(foco),
             placeholder = {
-                Text("Endereço ou pesquisa", style = MaterialTheme.typography.bodyLarge)
+                Text(stringResource(R.string.endereco_sugestao), style = MaterialTheme.typography.bodyLarge)
             },
             textStyle = MaterialTheme.typography.bodyLarge,
             singleLine = true,
@@ -131,7 +133,7 @@ fun FolhaEndereco(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
-                "Procura com ${motor.etiqueta}",
+                stringResource(R.string.endereco_procura_com, motor.etiqueta),
                 style = MaterialTheme.typography.labelSmall,
                 color = if (motor.exigeTor) CoresEstado.tor
                         else MaterialTheme.colorScheme.onSurfaceVariant,
@@ -150,7 +152,7 @@ fun FolhaEndereco(
                     modifier = Modifier.size(15.dp),
                 )
                 Text(
-                    "Definições",
+                    stringResource(R.string.mais_definicoes),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(start = 6.dp),
@@ -193,7 +195,7 @@ fun FolhaSeparadores(
                 ) {
                     if (separador.privado) {
                         Icon(
-                            Icons.Default.VisibilityOff, contentDescription = "Privado",
+                            Icons.Default.VisibilityOff, contentDescription = stringResource(R.string.acao_privado),
                             tint = CoresEstado.tor,
                             modifier = Modifier.size(16.dp).padding(end = 2.dp),
                         )
@@ -213,7 +215,7 @@ fun FolhaSeparadores(
                         contentAlignment = Alignment.Center,
                     ) {
                         Icon(
-                            Icons.Default.Close, contentDescription = "Fechar separador",
+                            Icons.Default.Close, contentDescription = stringResource(R.string.acao_fechar_separador),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(18.dp),
                         )
@@ -230,7 +232,7 @@ fun FolhaSeparadores(
         ) {
             Icon(Icons.Default.Add, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
             Text(
-                "Novo separador",
+                stringResource(R.string.acao_novo_separador),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(start = 12.dp),
@@ -317,15 +319,15 @@ fun FolhaMais(
     if (aConfirmarLimpeza) {
         AlertDialog(
             onDismissRequest = { aConfirmarLimpeza = false },
-            title = { Text("Limpar tudo?") },
-            text = { Text("Fecha todos os separadores e apaga cookies, cache e sessões. Não há como desfazer.") },
+            title = { Text(stringResource(R.string.limpar_titulo)) },
+            text = { Text(stringResource(R.string.limpar_texto)) },
             confirmButton = {
                 TextButton(onClick = { aConfirmarLimpeza = false; aoLimpar() }) {
-                    Text("Limpar", color = CoresEstado.perigo)
+                    Text(stringResource(R.string.limpar_confirmar), color = CoresEstado.perigo)
                 }
             },
             dismissButton = {
-                TextButton(onClick = { aConfirmarLimpeza = false }) { Text("Cancelar") }
+                TextButton(onClick = { aConfirmarLimpeza = false }) { Text(stringResource(R.string.cancelar)) }
             },
         )
     }
@@ -338,9 +340,9 @@ fun FolhaMais(
     ) {
         Text(
             text = when (estadoUblock) {
-                is EstadoUblock.Instalado -> "uBlock Origin ${estadoUblock.versao}"
-                is EstadoUblock.Falhou -> "uBlock Origin em falta"
-                else -> "uBlock Origin a instalar…"
+                is EstadoUblock.Instalado -> stringResource(R.string.ublock_instalado, estadoUblock.versao)
+                is EstadoUblock.Falhou -> stringResource(R.string.ublock_em_falta)
+                else -> stringResource(R.string.ublock_a_instalar)
             },
             style = MaterialTheme.typography.labelSmall,
             color = if (estadoUblock is EstadoUblock.Falhou) CoresEstado.perigo
@@ -349,11 +351,18 @@ fun FolhaMais(
         )
 
         if (estadoTor is EstadoTor.Pronto) {
-            Linha(Icons.Default.Autorenew, "Nova identidade", "Circuitos novos para todos os sítios", aoNovaIdentidade)
+            Linha(
+                Icons.Default.Autorenew,
+                stringResource(R.string.mais_nova_identidade),
+                stringResource(R.string.mais_nova_identidade_detalhe),
+                aoNovaIdentidade,
+            )
         }
-        Linha(Icons.Default.Tune, "Definições", null, aoDefinicoes)
+        Linha(Icons.Default.Tune, stringResource(R.string.mais_definicoes), null, aoDefinicoes)
         Linha(
-            Icons.Default.DeleteSweep, "Limpar tudo", "Cookies, cache, sessões e separadores",
+            Icons.Default.DeleteSweep,
+            stringResource(R.string.mais_limpar),
+            stringResource(R.string.mais_limpar_detalhe),
             { aConfirmarLimpeza = true }, perigo = true,
         )
     }

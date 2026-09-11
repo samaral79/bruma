@@ -1,5 +1,6 @@
 package pt.shrek.bruma.navegador
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -14,6 +15,7 @@ import org.mozilla.geckoview.GeckoRuntime
  * gesto sem explicação é pior do que dar a volta.
  */
 class GestorSeparadores(
+    private val contexto: Context,
     private val runtime: GeckoRuntime,
     private val aoAvisar: (String) -> Unit,
 ) {
@@ -32,6 +34,7 @@ class GestorSeparadores(
         val separador = Separador(
             id = proximoId++,
             privado = privado,
+            contexto = contexto,
             runtime = runtime,
             aoPedirNovoSeparador = { destino -> novo(destino, privado) },
             aoAvisar = aoAvisar,

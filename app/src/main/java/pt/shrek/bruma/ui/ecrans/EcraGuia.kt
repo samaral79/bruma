@@ -24,6 +24,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import pt.shrek.bruma.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -65,26 +67,10 @@ private enum class DesenhoGuia { MARCA, CAPSULA, GESTOS, TOR }
 @Composable
 fun EcraGuia(mao: Mao, aoTerminar: () -> Unit) {
     val paginas = listOf(
-        Pagina(
-            "bruma",
-            "Um navegador para uma mão só.\n\nTor por dentro, sem precisar de mais nenhuma app, e o uBlock Origin a sério a bloquear anúncios e rastreadores.",
-            DesenhoGuia.MARCA,
-        ),
-        Pagina(
-            "A cápsula",
-            "Não há barra em cima nem em baixo. Há uma cápsula do lado da tua mão, à altura do polegar.\n\nO ponto em cima diz-te tudo: roxo é tor ligado, cinzento é ligação cifrada, vermelho é sem cifra.",
-            DesenhoGuia.CAPSULA,
-        ),
-        Pagina(
-            "Os gestos",
-            "Tocar abre a caixa de endereço.\n\nArrastar para cima ou para baixo troca de separador.\n\nArrastar para dentro abre as ações. Para fora esconde a cápsula, para leres sem nada à frente.",
-            DesenhoGuia.GESTOS,
-        ),
-        Pagina(
-            "O Tor",
-            "O escudo nas ações liga o Tor. A partir daí o tráfego sai pela rede Tor, os endereços .onion funcionam, e a busca passa pelo DuckDuckGo onion.\n\nNão é o Tor Browser: esconde de onde estás, mas não te torna igual a toda a gente.",
-            DesenhoGuia.TOR,
-        ),
+        Pagina(stringResource(R.string.guia_1_titulo), stringResource(R.string.guia_1_texto), DesenhoGuia.MARCA),
+        Pagina(stringResource(R.string.guia_2_titulo), stringResource(R.string.guia_2_texto), DesenhoGuia.CAPSULA),
+        Pagina(stringResource(R.string.guia_3_titulo), stringResource(R.string.guia_3_texto), DesenhoGuia.GESTOS),
+        Pagina(stringResource(R.string.guia_4_titulo), stringResource(R.string.guia_4_texto), DesenhoGuia.TOR),
     )
 
     val estado = rememberPagerState { paginas.size }
@@ -104,7 +90,7 @@ fun EcraGuia(mao: Mao, aoTerminar: () -> Unit) {
         // o caminho principal, e não deve ser premida por acidente.
         if (!ultima) {
             Text(
-                "Saltar",
+                stringResource(R.string.guia_saltar),
                 style = MaterialTheme.typography.labelLarge,
                 color = Color.White.copy(alpha = 0.4f),
                 modifier = Modifier
@@ -192,7 +178,7 @@ fun EcraGuia(mao: Mao, aoTerminar: () -> Unit) {
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    if (ultima) "Começar" else "Seguinte",
+                    stringResource(if (ultima) R.string.guia_comecar else R.string.guia_seguinte),
                     style = MaterialTheme.typography.labelLarge,
                     color = if (ultima) Color(0xFF0B0C0E) else Color.White.copy(alpha = 0.85f),
                 )

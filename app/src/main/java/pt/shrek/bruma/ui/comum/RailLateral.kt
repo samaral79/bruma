@@ -19,6 +19,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import pt.shrek.bruma.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -169,10 +171,10 @@ fun RailLateral(
 @Composable
 private fun PontoDeEstado(cor: Color, estadoTor: EstadoTor) {
     val descricao = when (estadoTor) {
-        is EstadoTor.Pronto -> "Tor ligado"
-        is EstadoTor.ALigar -> "Tor a ligar, ${estadoTor.progresso} por cento"
-        is EstadoTor.Falhou -> "Tor falhou"
-        EstadoTor.Desligado -> "Sem tor"
+        is EstadoTor.Pronto -> stringResource(R.string.estado_tor_ligado)
+        is EstadoTor.ALigar -> stringResource(R.string.estado_tor_a_ligar, estadoTor.progresso)
+        is EstadoTor.Falhou -> stringResource(R.string.estado_tor_falhou)
+        EstadoTor.Desligado -> stringResource(R.string.estado_sem_tor)
     }
     Box(
         Modifier

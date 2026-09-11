@@ -17,6 +17,8 @@ import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import pt.shrek.bruma.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -61,8 +63,8 @@ fun EcraBloqueio(aoDesbloquear: () -> Unit) {
     fun pedirIdentificacao() {
         atividade ?: return
         val pedido = BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Bruma")
-            .setSubtitle("Identifica-te para abrir o navegador")
+            .setTitle(contexto.getString(R.string.bloqueio_titulo))
+            .setSubtitle(contexto.getString(R.string.bloqueio_subtitulo))
             .setAllowedAuthenticators(AUTENTICADORES)
             .build()
 
@@ -105,7 +107,7 @@ fun EcraBloqueio(aoDesbloquear: () -> Unit) {
             ) {
                 Icon(
                     Icons.Default.Fingerprint,
-                    contentDescription = "Identificar",
+                    contentDescription = stringResource(R.string.bloqueio_identificar),
                     tint = CoresEstado.tor,
                     modifier = Modifier.size(34.dp),
                 )
@@ -117,7 +119,7 @@ fun EcraBloqueio(aoDesbloquear: () -> Unit) {
                 modifier = Modifier.padding(top = 26.dp),
             )
             Text(
-                "Toca para te identificares",
+                stringResource(R.string.bloqueio_toca),
                 style = MaterialTheme.typography.labelSmall,
                 color = Color.White.copy(alpha = 0.4f),
                 textAlign = TextAlign.Center,
