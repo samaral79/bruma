@@ -23,10 +23,21 @@ import pt.shrek.bruma.navegador.MotorGecko
  */
 class BrumaApp : Application() {
 
+    /**
+     * A única instância de [Definicoes] da app.
+     *
+     * Cada instância tem o seu próprio estado do Compose por trás. Duas
+     * instâncias são dois conjuntos de valores que não se falam: uma definição
+     * mudada num sítio fica gravada no disco mas nunca é vista pelo outro até a
+     * app reiniciar. Ter uma só, à mão de quem precisa, elimina essa classe
+     * inteira de erros em vez de os apanhar um a um.
+     */
+    val definicoes: Definicoes by lazy { Definicoes(this) }
+
     override fun onCreate() {
         super.onCreate()
         if (!ehProcessoPrincipal()) return
-        MotorGecko.iniciar(this, Definicoes(this))
+        MotorGecko.iniciar(this, definicoes)
     }
 
     private fun ehProcessoPrincipal(): Boolean {

@@ -24,7 +24,9 @@ enum class Folha { NENHUMA, SEPARADORES, DEFINICOES, ENDERECO, MAIS }
 
 class NavegadorViewModel(aplicacao: Application) : AndroidViewModel(aplicacao) {
 
-    val definicoes = Definicoes(aplicacao)
+    // A instância vem da Application: ver a nota em BrumaApp.definicoes sobre
+    // porque não pode haver duas.
+    val definicoes = (aplicacao as pt.shrek.bruma.BrumaApp).definicoes
 
     private val _avisos = MutableSharedFlow<String>(
         replay = 0, extraBufferCapacity = 4, onBufferOverflow = BufferOverflow.DROP_OLDEST,
@@ -55,7 +57,6 @@ class NavegadorViewModel(aplicacao: Application) : AndroidViewModel(aplicacao) {
         separadores.novo()
         observarTor()
         if (definicoes.torAoArrancar) ligarTor()
-        definicoes.paginaInicial.takeIf { it.isNotBlank() }?.let { separadores.ativo?.abrir(it) }
     }
 
     /**
@@ -130,6 +131,20 @@ class NavegadorViewModel(aplicacao: Application) : AndroidViewModel(aplicacao) {
     }
 
     fun recarregar() = ativo?.recarregar()
+
+    /**
+     * Volta ao ecrã inicial sem fechar o separador.
+     *
+     * Carregar `about:blank` no motor é o que faz o separador deixar de ter
+     * página — e é assim que a app decide mostrar o início em vez do Gecko. O
+     * histórico do separador é limpo junto, senão o botão de voltar levava de
+     * novo à página de que se acabou de sair.
+     */
+    fun irParaInicio() {
+        val separador = ativo ?: return
+        separador.limparParaInicio()
+        fecharTudo()
+    }
     fun voltar(): Boolean {
         val separador = ativo ?: return false
         if (!separador.podeVoltar) return false

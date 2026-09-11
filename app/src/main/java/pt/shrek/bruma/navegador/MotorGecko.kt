@@ -281,6 +281,25 @@ object MotorGecko {
         if (pronto) runtime.settings.javaScriptEnabled = ligado
     }
 
+    /**
+     * O isolamento de cookies por sítio (dFPI) já é escolhido ao criar o
+     * runtime, mas o `ContentBlocking.Settings` não muda depois disso. A
+     * preferência equivalente muda, e é por ela que a definição passa a valer
+     * sem reiniciar a app.
+     *
+     * Desligado não quer dizer "aceitar tudo": fica em 4, que continua a recusar
+     * cookies de rastreadores conhecidos. Uma definição de privacidade que ao
+     * ser desligada abrisse as portas todas seria uma armadilha.
+     */
+    fun definirIsolamentoDeCookies(ligado: Boolean) {
+        if (!pronto) return
+        aplicar(
+            SetGeckoPreference.setIntPref(
+                "network.cookie.cookieBehavior", if (ligado) 5 else 4, UTILIZADOR,
+            )
+        )
+    }
+
     fun definirApenasHttps(ligado: Boolean) {
         if (pronto) {
             runtime.settings.allowInsecureConnections =

@@ -139,6 +139,7 @@ fun EcraNavegador(vm: NavegadorViewModel) {
             aoSeparadores = { vm.folha = Folha.SEPARADORES },
             aoRecarregar = { vm.recarregar() },
             aoAlternarTor = { vm.alternarTor() },
+            aoInicio = { vm.irParaInicio() },
             aoMais = { vm.folha = Folha.MAIS },
         )
 
@@ -183,8 +184,12 @@ fun EcraNavegador(vm: NavegadorViewModel) {
                 )
 
                 Folha.DEFINICOES -> FolhaDefinicoes(vm.definicoes) {
+                    // Tudo o que o motor precisa de saber é reaplicado a cada
+                    // mudança. É barato e evita a classe de erros em que uma
+                    // definição nova fica gravada mas nunca chega ao Gecko.
                     MotorGecko.definirJavascript(vm.definicoes.javascript)
                     MotorGecko.definirApenasHttps(vm.definicoes.apenasHttps)
+                    MotorGecko.definirIsolamentoDeCookies(vm.definicoes.isolarCookies)
                     MotorGecko.aplicarResistenciaAImpressaoDigital(vm.definicoes.resistirImpressaoDigital)
                 }
 

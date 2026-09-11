@@ -59,6 +59,7 @@ import pt.shrek.bruma.core.MotorBusca
 import pt.shrek.bruma.navegador.EstadoUblock
 import pt.shrek.bruma.navegador.Separador
 import pt.shrek.bruma.tor.EstadoTor
+import pt.shrek.bruma.ui.ecrans.podeAutenticar
 import pt.shrek.bruma.ui.tema.CoresEstado
 
 /**
@@ -100,10 +101,17 @@ fun FolhaEndereco(
             onValueChange = { campo = it },
             modifier = Modifier
                 .fillMaxWidth()
+                // Mais alta do que a caixa normal do Material: um endereço é
+                // escrito com o telemóvel numa mão e muitas vezes em movimento,
+                // e um alvo de 56 dp é difícil de acertar à primeira.
+                .heightIn(min = 68.dp)
                 .focusRequester(foco),
-            placeholder = { Text("Endereço ou pesquisa") },
+            placeholder = {
+                Text("Endereço ou pesquisa", style = MaterialTheme.typography.bodyLarge)
+            },
+            textStyle = MaterialTheme.typography.bodyLarge,
             singleLine = true,
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(22.dp),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
             keyboardActions = KeyboardActions(onGo = { aoConfirmar(campo.text) }),
         )
@@ -198,8 +206,9 @@ fun FolhaSeparadores(
 /** Definições: uma lista de interruptores, tudo à distância do polegar. */
 @Composable
 fun FolhaDefinicoes(definicoes: Definicoes, aoMudar: () -> Unit) {
-    var versao by remember { mutableStateOf(0) }
-    fun mudou() { versao++; aoMudar() }
+    // As Definicoes são estado do Compose e recompõem sozinhas ao mudar; aqui
+    // só é preciso avisar o motor do Gecko, que vive fora do Compose.
+    fun mudou() = aoMudar()
 
     val contexto = androidx.compose.ui.platform.LocalContext.current
     var temFundo by remember { mutableStateOf(Fundo.existe(contexto)) }
@@ -287,6 +296,13 @@ fun FolhaDefinicoes(definicoes: Definicoes, aoMudar: () -> Unit) {
             }
             item {
                 Interruptor(
+                    "Isolar cookies por sítio",
+                    "Um cookie posto pelo mesmo rastreador em dois sítios deixa de os poder ligar",
+                    definicoes.isolarCookies,
+                ) { definicoes.isolarCookies = it; mudou() }
+            }
+            item {
+                Interruptor(
                     "Limpar tudo ao sair", null, definicoes.limparAoSair,
                 ) { definicoes.limparAoSair = it; mudou() }
             }
@@ -296,6 +312,16 @@ fun FolhaDefinicoes(definicoes: Definicoes, aoMudar: () -> Unit) {
                     "Tira a app das capturas de ecrã e da lista de apps recentes",
                     definicoes.ecraSeguro,
                 ) { definicoes.ecraSeguro = it; mudou() }
+            }
+            item {
+                val temSensor = podeAutenticar(contexto)
+                Interruptor(
+                    "Pedir identificação para abrir",
+                    if (temSensor) "Impressão digital, rosto ou código do telemóvel"
+                    else "Indisponível: este telemóvel não tem bloqueio de ecrã configurado",
+                    definicoes.pedirBiometria && temSensor,
+                    ativo = temSensor,
+                ) { definicoes.pedirBiometria = it; mudou() }
             }
             item {
                 Escolha("Mão", if (definicoes.mao == pt.shrek.bruma.core.Mao.DIREITA) "Direita" else "Esquerda") {
@@ -310,16 +336,27 @@ fun FolhaDefinicoes(definicoes: Definicoes, aoMudar: () -> Unit) {
 }
 
 @Composable
-private fun Interruptor(titulo: String, detalhe: String?, valor: Boolean, aoMudar: (Boolean) -> Unit) {
+private fun Interruptor(
+    titulo: String,
+    detalhe: String?,
+    valor: Boolean,
+    ativo: Boolean = true,
+    aoMudar: (Boolean) -> Unit,
+) {
     Row(
         Modifier
             .fillMaxWidth()
-            .clickable { aoMudar(!valor) }
+            .clickable(enabled = ativo) { aoMudar(!valor) }
             .padding(horizontal = 20.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(Modifier.weight(1f)) {
-            Text(titulo, style = MaterialTheme.typography.bodyLarge)
+            Text(
+                titulo,
+                style = MaterialTheme.typography.bodyLarge,
+                color = if (ativo) MaterialTheme.colorScheme.onSurface
+                        else MaterialTheme.colorScheme.outline,
+            )
             if (detalhe != null) {
                 Text(
                     detalhe,
@@ -329,7 +366,12 @@ private fun Interruptor(titulo: String, detalhe: String?, valor: Boolean, aoMuda
                 )
             }
         }
-        Switch(checked = valor, onCheckedChange = aoMudar, modifier = Modifier.padding(start = 12.dp))
+        Switch(
+            checked = valor,
+            onCheckedChange = aoMudar,
+            enabled = ativo,
+            modifier = Modifier.padding(start = 12.dp),
+        )
     }
 }
 

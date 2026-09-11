@@ -199,6 +199,17 @@ class Separador(
         sessao.loadUri(destino)
     }
 
+    /** Descarrega a página e esquece por onde andou. */
+    fun limparParaInicio() {
+        sessao.stop()
+        sessao.loadUri("about:blank")
+        sessao.purgeHistory()
+        url = ""
+        titulo = ""
+        bloqueados = 0
+        seguranca = Seguranca.NENHUMA
+    }
+
     fun recarregar() = sessao.reload()
     fun parar() = sessao.stop()
     fun voltar() = sessao.goBack()

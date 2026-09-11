@@ -15,8 +15,10 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Refresh
@@ -73,6 +75,7 @@ fun LequeAcoes(
     aoSeparadores: () -> Unit,
     aoRecarregar: () -> Unit,
     aoAlternarTor: () -> Unit,
+    aoInicio: () -> Unit,
     aoMais: () -> Unit,
 ) {
     val abertura by animateFloatAsState(
@@ -90,6 +93,7 @@ fun LequeAcoes(
         Acao(Icons.Default.MoreHoriz, "Mais", aoMais),
         Acao(Icons.Default.VisibilityOff, "Privado", aoNovoPrivado),
         Acao(Icons.Default.Refresh, "Recarregar", aoRecarregar),
+        Acao(Icons.Default.Home, "Início", aoInicio),
         Acao(Icons.Default.Layers, "Separadores", aoSeparadores),
         Acao(Icons.Default.Add, "Novo separador", aoNovoSeparador),
         Acao(
@@ -150,8 +154,7 @@ private fun ItemAcao(
             Modifier
                 .size(tamanho)
                 .clip(CircleShape)
-                .background(fundo)
-                .clickable { aoCarregar() },
+                .background(fundo),
             contentAlignment = Alignment.Center,
         ) {
             Icon(acao.icone, contentDescription = acao.etiqueta, tint = frente, modifier = Modifier.size(21.dp))
@@ -169,6 +172,13 @@ private fun ItemAcao(
     Row(
         modifier = Modifier
             .alpha(progresso)
+            // A linha toda é o alvo, não só o disco. Com a etiqueta ao lado, um
+            // alvo que parece tocável e não é gera toques que não fazem nada —
+            // e a pessoa conclui que a app está encravada, não que falhou o
+            // círculo por vinte pixels.
+            .clip(RoundedCornerShape(30.dp))
+            .clickable { aoCarregar() }
+            .padding(start = 12.dp, end = 2.dp, top = 2.dp, bottom = 2.dp)
             // Entram a deslizar do lado da aresta, como se saíssem de dentro da
             // cápsula em vez de aparecerem do nada.
             .offset {
