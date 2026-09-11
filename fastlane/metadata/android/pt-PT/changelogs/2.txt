@@ -1,0 +1,1 @@
+Assinatura v3, que permite trocar a chave no futuro sem obrigar a reinstalar.

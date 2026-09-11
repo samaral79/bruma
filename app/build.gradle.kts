@@ -25,8 +25,8 @@ android {
         // O GeckoView 155 exige 26; o tor embutido 21; o Compose 23.
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.0.1"
         vectorDrawables { useSupportLibrary = true }
     }
 
@@ -37,6 +37,14 @@ android {
                 storePassword = keystoreProps.getProperty("storePassword")
                 keyAlias = keystoreProps.getProperty("keyAlias")
                 keyPassword = keystoreProps.getProperty("keyPassword")
+
+                // O v2 chega para instalar em tudo o que a app suporta, e é o
+                // que o AGP escolheu sozinho. Mas o v3 é o que permite **rodar
+                // a chave** um dia: trocar a chave de assinatura sem obrigar
+                // toda a gente a desinstalar e perder os dados. Uma app que
+                // pode viver anos não deve fechar essa porta na v1.0.
+                enableV2Signing = true
+                enableV3Signing = true
             }
         }
     }

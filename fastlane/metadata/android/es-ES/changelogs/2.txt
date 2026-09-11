@@ -1,0 +1,1 @@
+Firma v3, que permite rotar la clave en el futuro sin obligar a reinstalar.
