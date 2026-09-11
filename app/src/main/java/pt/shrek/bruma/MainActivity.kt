@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentActivity
 import pt.shrek.bruma.core.Definicoes
 import pt.shrek.bruma.ui.NavegadorViewModel
 import pt.shrek.bruma.ui.ecrans.EcraBloqueio
+import pt.shrek.bruma.ui.ecrans.EcraGuia
 import pt.shrek.bruma.ui.ecrans.EcraNavegador
 import pt.shrek.bruma.ui.ecrans.podeAutenticar
 import pt.shrek.bruma.ui.tema.TemaBruma
@@ -66,10 +67,16 @@ class MainActivity : FragmentActivity() {
                     podeAutenticar(this@MainActivity) &&
                     !desbloqueado
 
-                if (trancada) {
-                    EcraBloqueio(aoDesbloquear = { desbloqueado = true })
-                } else {
-                    EcraNavegador(vm)
+                when {
+                    // O guia vem primeiro: explica a app a quem acabou de a
+                    // instalar, e não mostra conteúdo nenhum que precise de
+                    // estar protegido pela identificação.
+                    !definicoes.guiaVisto -> EcraGuia(
+                        mao = definicoes.mao,
+                        aoTerminar = { definicoes.guiaVisto = true },
+                    )
+                    trancada -> EcraBloqueio(aoDesbloquear = { desbloqueado = true })
+                    else -> EcraNavegador(vm)
                 }
             }
         }

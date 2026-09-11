@@ -105,6 +105,13 @@ fun EcraDefinicoes(
                 }
             }
 
+            item {
+                Escolha("Ver o guia outra vez", "") {
+                    definicoes.guiaVisto = false
+                    aoSair()
+                }
+            }
+
             item { Seccao("Busca") }
             item {
                 Escolha("Motor de busca", definicoes.motorBusca.etiqueta) {

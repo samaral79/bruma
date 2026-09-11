@@ -137,6 +137,15 @@ class Definicoes(context: Context) {
     /** Pedir impressão digital ou rosto para abrir a app. */
     var pedirBiometria: Boolean by Booleana("pedir_biometria", false)
 
+    /**
+     * Se o guia de boas-vindas já foi visto.
+     *
+     * Guardado nas definições e não num ficheiro à parte para seguir o mesmo
+     * caminho de todo o resto — e para desaparecer junto com tudo quando alguém
+     * limpa os dados da app, que é o que essa pessoa está a pedir.
+     */
+    var guiaVisto: Boolean by Booleana("guia_visto", false)
+
     // --- uma mão ----------------------------------------------------------
     private var maoNome: String by Texto("mao", Mao.DIREITA.name)
 
