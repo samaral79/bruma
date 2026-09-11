@@ -1,0 +1,16 @@
+Bruma es un navegador hecho para una sola mano. No hay barra arriba ni abajo: hay una cápsula al lado de tu mano, a la altura del pulgar, y todo está a un gesto de distancia.
+
+Construido sobre GeckoView, el motor de Firefox, y no sobre el WebView del sistema. Esa elección es la que hace posible todo lo demás.
+
+• Tor dentro de la app. El binario de tor viaja en el APK y se ejecuta en un servicio en primer plano. No necesitas Orbot ni ninguna otra app.
+• Las direcciones .onion funcionan. El tráfico sale por socks5 con DNS remoto, así que los nombres onion se resuelven dentro de la red Tor y nunca llegan al DNS de tu operadora.
+• DuckDuckGo por defecto, cambiando solo al servicio onion oficial cuando Tor está activado, para que las búsquedas nunca salgan de la red Tor por un nodo de salida.
+• El uBlock Origin de verdad, integrado como extensión real, no una imitación que lee las mismas listas.
+• Protección reforzada contra el rastreo, cookies aisladas por sitio, parámetros de seguimiento eliminados de las direcciones, WebRTC desactivado, referente limitado al mismo origen.
+• Resistencia a la huella digital, pantalla segura y bloqueo biométrico, opcionales.
+
+Toca la cápsula para escribir una dirección. Arrastra arriba o abajo para cambiar de pestaña. Hacia dentro abre las acciones. Hacia fuera la esconde, para leer sin nada delante.
+
+Lo que no es: Bruma no es el Tor Browser. Esconde desde dónde estás, pero no te hace igual a todo el mundo. Si necesitas protección frente a un adversario estatal, usa el Tor Browser.
+
+Sin cuentas, sin telemetría, sin servidores nuestros. Software libre bajo la GPLv3.

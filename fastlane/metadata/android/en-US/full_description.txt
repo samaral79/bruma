@@ -1,0 +1,16 @@
+Bruma is a browser built for one hand. There is no bar at the top or the bottom — there is a capsule on the side of your hand, at thumb height, and everything is a gesture away.
+
+Built on GeckoView, the Firefox engine, not the system WebView. That choice is what makes the rest possible.
+
+• Tor inside the app. The tor binary ships in the APK and runs in a foreground service. You do not need Orbot or any other app.
+• .onion addresses work. Traffic leaves through socks5 with remote DNS, so onion names resolve inside the Tor network and never reach your carrier's DNS.
+• DuckDuckGo by default, switching to the official onion service automatically when Tor is on, so searches never leave the Tor network through an exit node.
+• The real uBlock Origin, bundled as a genuine extension — not an imitation that reads the same filter lists.
+• Strict tracking protection, cookies isolated per site, tracking parameters stripped from URLs, WebRTC off, referrer limited to same origin.
+• Optional fingerprinting resistance, secure screen, and biometric app lock.
+
+Tap the capsule to type an address. Drag up or down to switch tabs. Drag inwards for the actions. Drag outwards to hide it and read with nothing in the way.
+
+What this is not: Bruma is not the Tor Browser. It hides where you are, but it does not make you look like everyone else. If you need protection from a state adversary, use the Tor Browser.
+
+No accounts, no telemetry, no servers of ours. Free software under the GPLv3.

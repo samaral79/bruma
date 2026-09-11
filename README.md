@@ -97,6 +97,20 @@ Ficam registadas porque nenhuma delas dá um erro que se perceba.
   diria "tor ligado" e sairia em direto. Nesse intervalo a rede é apontada a um
   porto fechado: os pedidos falham em vez de vazarem.
 
+## Instalar
+
+A app não está no Google Play. Há três formas de a receber, todas com
+atualizações automáticas menos a última:
+
+- **IzzyOnDroid** — acrescenta o repositório
+  [apt.izzysoft.de/fdroid](https://apt.izzysoft.de/fdroid/) na app F-Droid e
+  procura por Bruma.
+- **Obtainium** — aponta-o para este repositório do GitHub.
+- **À mão** — descarrega o APK da
+  [versão mais recente](https://github.com/samaral79/bruma/releases/latest).
+  Escolhe `arm64-v8a` se não souberes qual: é o de praticamente todos os
+  telemóveis dos últimos anos.
+
 ## Compilar
 
 ```bash
@@ -116,7 +130,22 @@ Testado num Galaxy A56 (Android 16, API 36): arranca, o uBlock instala, o tor
 faz circuito e o `.onion` do DuckDuckGo abre. Por afinar: o aspeto e os gestos,
 que só o uso diário dirá.
 
+## Lançar uma versão
+
+Precisa de uma chave de assinatura em `keystore.properties` (ver `lancar.sh`).
+
+```bash
+./lancar.sh
+```
+
+Compila assinado, cria a etiqueta e publica no GitHub Releases. O IzzyOnDroid e
+o Obtainium leem daí sozinhos.
+
 ## Licenças
+
+A Bruma é **GPLv3** — ver `LICENSE`. É a licença do uBlock Origin, que vai
+embutido, e não vale a pena inventar outra coisa quando o resultado prático
+seria o mesmo.
 
 O uBlock Origin é GPLv3 e está redistribuído sem modificações em
 `app/src/main/assets/extensions/ublock/` (retirada apenas a pasta `META-INF/`

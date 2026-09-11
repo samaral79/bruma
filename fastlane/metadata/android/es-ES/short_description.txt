@@ -1,0 +1,1 @@
+Navegador para una mano, con Tor integrado y uBlock Origin
