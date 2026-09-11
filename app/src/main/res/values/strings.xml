@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bruma</string>
+    <string name="canal_tor_nome">Tor</string>
+    <string name="canal_tor_descricao">Estado do cliente Tor embutido</string>
+</resources>

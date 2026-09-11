@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Bruma" parent="android:Theme.Material.NoActionBar" />
+
+    <style name="Theme.Bruma.Arranque" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#0B0C0E</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_bruma</item>
+        <item name="postSplashScreenTheme">@style/Theme.Bruma</item>
+    </style>
+</resources>

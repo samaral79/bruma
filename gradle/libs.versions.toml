@@ -1,0 +1,49 @@
+[versions]
+agp = "9.3.1"
+kotlin = "2.4.10"
+coreKtx = "1.19.0"
+lifecycle = "2.11.0"
+activityCompose = "1.13.0"
+composeBom = "2026.08.00"
+materialIcons = "1.7.8"
+geckoview = "155.0.20260903215306"
+splashscreen = "1.2.0"
+biometric = "1.1.0"
+securityCrypto = "1.1.0"
+okhttp = "5.5.0"
+coroutines = "1.11.0"
+# Tor embutido. O runtime e os recursos (binários do tor) versionam-se em
+# separado: 409.5.0 corresponde ao tor 0.4.9.5.
+kmpTor = "2.6.0"
+kmpTorResource = "409.5.0"
+
+[libraries]
+androidx-core-ktx          = { group = "androidx.core",      name = "core-ktx",                    version.ref = "coreKtx" }
+androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx",       version.ref = "lifecycle" }
+androidx-lifecycle-vm      = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+androidx-lifecycle-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose",   version.ref = "lifecycle" }
+androidx-activity-compose  = { group = "androidx.activity",  name = "activity-compose",            version.ref = "activityCompose" }
+androidx-splashscreen      = { group = "androidx.core",      name = "core-splashscreen",           version.ref = "splashscreen" }
+androidx-biometric         = { group = "androidx.biometric", name = "biometric",                   version.ref = "biometric" }
+androidx-security-crypto   = { group = "androidx.security",  name = "security-crypto",             version.ref = "securityCrypto" }
+
+compose-bom                = { group = "androidx.compose",            name = "compose-bom",   version.ref = "composeBom" }
+compose-ui                 = { group = "androidx.compose.ui",         name = "ui" }
+compose-ui-graphics        = { group = "androidx.compose.ui",         name = "ui-graphics" }
+compose-ui-tooling         = { group = "androidx.compose.ui",         name = "ui-tooling" }
+compose-ui-tooling-preview = { group = "androidx.compose.ui",         name = "ui-tooling-preview" }
+compose-material3          = { group = "androidx.compose.material3",  name = "material3" }
+compose-material-icons     = { group = "androidx.compose.material",   name = "material-icons-extended", version.ref = "materialIcons" }
+
+geckoview                  = { group = "org.mozilla.geckoview", name = "geckoview",                version.ref = "geckoview" }
+
+okhttp                     = { group = "com.squareup.okhttp3",   name = "okhttp",                     version.ref = "okhttp" }
+coroutines-android         = { group = "org.jetbrains.kotlinx",  name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+
+kmptor-runtime             = { group = "io.matthewnelson.kmp-tor", name = "runtime",            version.ref = "kmpTor" }
+kmptor-service-ui          = { group = "io.matthewnelson.kmp-tor", name = "runtime-service-ui", version.ref = "kmpTor" }
+kmptor-resource-exec       = { group = "io.matthewnelson.kmp-tor", name = "resource-exec-tor",  version.ref = "kmpTorResource" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-compose      = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

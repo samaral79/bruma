@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- O tor desliga a rede sozinho quando a ligação cai, e volta a ligá-la
+         quando regressa; sem isto ficava a tentar às cegas. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- O tor corre num serviço em primeiro plano: sem ele, o Android mata o
+         processo com o ecrã apagado e os circuitos caem a meio da navegação. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:name=".BrumaApp"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/regras_extracao"
+        android:fullBackupContent="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        android:theme="@style/Theme.Bruma.Arranque">
+
+        <!-- usesCleartextTraffic: os serviços onion falam quase sempre em http.
+             Não é uma quebra de segurança — o endereço onion é a chave pública
+             do serviço, por isso a ligação já é cifrada e autenticada sem TLS. -->
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|density|uiMode"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.Bruma.Arranque">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- Poder ser escolhido como navegador do sistema. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+            </intent-filter>
+        </activity>
+
+        <!-- O tipo "specialUse" é o único que não exige permissões extra nem
+             pré-requisitos em execução. O kmp-tor não o declara por nós de
+             propósito, porque a escolha afeta a submissão em lojas. -->
+        <service
+            android:name="io.matthewnelson.kmp.tor.runtime.service.TorService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse"
+            tools:node="merge">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Mantém o cliente Tor embutido a correr enquanto o navegador está aberto, para os circuitos não caírem com o ecrã apagado." />
+        </service>
+    </application>
+</manifest>
