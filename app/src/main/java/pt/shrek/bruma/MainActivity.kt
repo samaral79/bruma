@@ -1,5 +1,6 @@
 package pt.shrek.bruma
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.compose.setContent
@@ -44,6 +45,7 @@ class MainActivity : FragmentActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        tratar(intent)
         setContent {
             TemaBruma {
                 // O ecrã seguro é aplicado aqui e não só no arranque: mudar a
@@ -71,6 +73,27 @@ class MainActivity : FragmentActivity() {
                 }
             }
         }
+    }
+
+    /**
+     * A atividade é `singleTask`: tocar no widget com a app já aberta não cria
+     * uma nova, entrega o intent aqui. Sem isto, o segundo toque no widget não
+     * fazia nada.
+     */
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        tratar(intent)
+    }
+
+    private fun tratar(intent: Intent?) {
+        intent ?: return
+        val url = intent.data?.takeIf { it.scheme == "http" || it.scheme == "https" }?.toString()
+        vm.tratarIntencao(intent.action, url)
+        // Limpar depois de tratar: senão uma rotação ou um regresso à app
+        // reabria a mesma página outra vez.
+        intent.data = null
+        intent.action = null
     }
 
     override fun onStop() {

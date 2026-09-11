@@ -70,12 +70,23 @@ import pt.shrek.bruma.ui.tema.CoresEstado
  * não obriga. A ordem não é arbitrária: o que mais se usa fica na fila de baixo,
  * que é a mais perto do polegar.
  */
-/** A caixa de endereço, ancorada em baixo, por cima do teclado. */
+/**
+ * A caixa de endereço, ancorada em baixo e por cima do teclado.
+ *
+ * É o alvo mais usado da app e por isso o maior: 72 dp de altura e texto de
+ * corpo grande. Um endereço escreve-se com o telemóvel numa mão, muitas vezes em
+ * movimento, e a caixa normal do Material — 56 dp — é difícil de acertar à
+ * primeira nessas condições.
+ *
+ * As definições abrem-se daqui. É onde a mão já está quando se quer mexer na
+ * app, e poupa o caminho cápsula → coluna → Mais → Definições.
+ */
 @Composable
 fun FolhaEndereco(
     urlAtual: String,
     motor: MotorBusca,
     aoConfirmar: (String) -> Unit,
+    aoAbrirDefinicoes: () -> Unit,
 ) {
     // `about:blank` é um detalhe interno do motor, não uma morada que alguém
     // queira ver ou editar: num separador novo a caixa abre vazia.
@@ -93,34 +104,59 @@ fun FolhaEndereco(
         Modifier
             .fillMaxWidth()
             .navigationBarsPadding()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+            .padding(horizontal = 14.dp)
+            .padding(bottom = 14.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         OutlinedTextField(
             value = campo,
             onValueChange = { campo = it },
             modifier = Modifier
                 .fillMaxWidth()
-                // Mais alta do que a caixa normal do Material: um endereço é
-                // escrito com o telemóvel numa mão e muitas vezes em movimento,
-                // e um alvo de 56 dp é difícil de acertar à primeira.
-                .heightIn(min = 68.dp)
+                .heightIn(min = 72.dp)
                 .focusRequester(foco),
             placeholder = {
                 Text("Endereço ou pesquisa", style = MaterialTheme.typography.bodyLarge)
             },
             textStyle = MaterialTheme.typography.bodyLarge,
             singleLine = true,
-            shape = RoundedCornerShape(22.dp),
+            shape = RoundedCornerShape(24.dp),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
             keyboardActions = KeyboardActions(onGo = { aoConfirmar(campo.text) }),
         )
-        Text(
-            "Procura com ${motor.etiqueta}",
-            style = MaterialTheme.typography.labelSmall,
-            color = if (motor.exigeTor) CoresEstado.tor else MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(start = 4.dp),
-        )
+
+        Row(
+            Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(
+                "Procura com ${motor.etiqueta}",
+                style = MaterialTheme.typography.labelSmall,
+                color = if (motor.exigeTor) CoresEstado.tor
+                        else MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Row(
+                Modifier
+                    .clip(RoundedCornerShape(16.dp))
+                    .clickable { aoAbrirDefinicoes() }
+                    .padding(horizontal = 10.dp, vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    Icons.Default.Tune,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(15.dp),
+                )
+                Text(
+                    "Definições",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(start = 6.dp),
+                )
+            }
+        }
     }
 
     androidx.compose.runtime.LaunchedEffect(Unit) { foco.requestFocus() }
@@ -199,138 +235,6 @@ fun FolhaSeparadores(
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(start = 12.dp),
             )
-        }
-    }
-}
-
-/** Definições: uma lista de interruptores, tudo à distância do polegar. */
-@Composable
-fun FolhaDefinicoes(definicoes: Definicoes, aoMudar: () -> Unit) {
-    // As Definicoes são estado do Compose e recompõem sozinhas ao mudar; aqui
-    // só é preciso avisar o motor do Gecko, que vive fora do Compose.
-    fun mudou() = aoMudar()
-
-    val contexto = androidx.compose.ui.platform.LocalContext.current
-    var temFundo by remember { mutableStateOf(Fundo.existe(contexto)) }
-
-    // O seletor de fotografias do sistema não pede permissão de armazenamento:
-    // a app só recebe a imagem escolhida, e nunca vê o resto da galeria.
-    val seletorDeFundo = rememberLauncherForActivityResult(
-        ActivityResultContracts.PickVisualMedia()
-    ) { uri ->
-        if (uri != null && Fundo.guardar(contexto, uri)) {
-            temFundo = true
-            mudou()
-        }
-    }
-
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .navigationBarsPadding()
-            .padding(bottom = 16.dp),
-    ) {
-        Text(
-            "Definições",
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(start = 20.dp, bottom = 8.dp, top = 4.dp),
-        )
-
-        LazyColumn(Modifier.heightIn(max = 460.dp)) {
-            item {
-                Escolha(
-                    "Fundo do início",
-                    if (temFundo) "Imagem escolhida" else "Névoa",
-                ) {
-                    if (temFundo) {
-                        // Segundo toque devolve o fundo desenhado: sem isto não
-                        // havia forma de desfazer a escolha de uma imagem.
-                        Fundo.apagar(contexto)
-                        temFundo = false
-                        mudou()
-                    } else {
-                        seletorDeFundo.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                        )
-                    }
-                }
-            }
-            item {
-                Escolha("Motor de busca", definicoes.motorBusca.etiqueta) {
-                    val todos = MotorBusca.entries
-                    val seguinte = todos[(todos.indexOf(definicoes.motorBusca) + 1) % todos.size]
-                    definicoes.motorBusca = seguinte
-                    mudou()
-                }
-            }
-            item {
-                Interruptor(
-                    "Preferir .onion com tor",
-                    "Com o tor ligado, a busca vai pelo DuckDuckGo onion e nunca sai da rede tor",
-                    definicoes.preferirOnionComTor,
-                ) { definicoes.preferirOnionComTor = it; mudou() }
-            }
-            item {
-                Interruptor(
-                    "Ligar o tor ao arrancar", null, definicoes.torAoArrancar,
-                ) { definicoes.torAoArrancar = it; mudou() }
-            }
-            item {
-                Interruptor(
-                    "Só HTTPS",
-                    "Recusa ligações em claro. Os .onion continuam a funcionar — já são cifrados pelo endereço",
-                    definicoes.apenasHttps,
-                ) { definicoes.apenasHttps = it; mudou() }
-            }
-            item {
-                Interruptor("JavaScript", null, definicoes.javascript) {
-                    definicoes.javascript = it; mudou()
-                }
-            }
-            item {
-                Interruptor(
-                    "Resistir à impressão digital",
-                    "Uniformiza janela, fuso e tipos de letra. Protege muito e parte alguns sítios",
-                    definicoes.resistirImpressaoDigital,
-                ) { definicoes.resistirImpressaoDigital = it; mudou() }
-            }
-            item {
-                Interruptor(
-                    "Isolar cookies por sítio",
-                    "Um cookie posto pelo mesmo rastreador em dois sítios deixa de os poder ligar",
-                    definicoes.isolarCookies,
-                ) { definicoes.isolarCookies = it; mudou() }
-            }
-            item {
-                Interruptor(
-                    "Limpar tudo ao sair", null, definicoes.limparAoSair,
-                ) { definicoes.limparAoSair = it; mudou() }
-            }
-            item {
-                Interruptor(
-                    "Ecrã seguro",
-                    "Tira a app das capturas de ecrã e da lista de apps recentes",
-                    definicoes.ecraSeguro,
-                ) { definicoes.ecraSeguro = it; mudou() }
-            }
-            item {
-                val temSensor = podeAutenticar(contexto)
-                Interruptor(
-                    "Pedir identificação para abrir",
-                    if (temSensor) "Impressão digital, rosto ou código do telemóvel"
-                    else "Indisponível: este telemóvel não tem bloqueio de ecrã configurado",
-                    definicoes.pedirBiometria && temSensor,
-                    ativo = temSensor,
-                ) { definicoes.pedirBiometria = it; mudou() }
-            }
-            item {
-                Escolha("Mão", if (definicoes.mao == pt.shrek.bruma.core.Mao.DIREITA) "Direita" else "Esquerda") {
-                    definicoes.mao =
-                        if (definicoes.mao == pt.shrek.bruma.core.Mao.DIREITA) pt.shrek.bruma.core.Mao.ESQUERDA
-                        else pt.shrek.bruma.core.Mao.DIREITA
-                    mudou()
-                }
-            }
         }
     }
 }

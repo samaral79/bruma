@@ -67,10 +67,18 @@ class Separador(
                 permissoes: MutableList<GeckoSession.PermissionDelegate.ContentPermission>,
                 temUtilizadorGesto: Boolean,
             ) {
-                // O motor anuncia `about:blank` ao abrir a sessão. Guardar isso
-                // como morada faria a app tratar um separador vazio como se
-                // tivesse página, e mostrava-o na barra e na caixa de endereço.
-                url = novoUrl.orEmpty().takeUnless { it == "about:blank" }.orEmpty()
+                // O motor anuncia `about:blank` ao abrir a sessão, e essa
+                // notificação chega **depois** de já lhe termos mandado carregar
+                // um endereço. Aceitá-la apagava o URL acabado de pedir, e a app
+                // saltava para o ecrã inicial com a página a carregar por trás —
+                // que foi o ecrã preto que apareceu ao abrir um link de fora.
+                //
+                // `about:blank` nunca é uma morada que interesse mostrar. Quando
+                // é mesmo para esvaziar o separador, quem o faz é
+                // [limparParaInicio], que limpa o estado à mão.
+                val morada = novoUrl.orEmpty()
+                if (morada == "about:blank") return
+                url = morada
                 // O contador de bloqueios é por página: mantê-lo entre páginas
                 // daria um número grande e sem significado.
                 bloqueados = 0
@@ -81,7 +89,10 @@ class Separador(
                 }
             }
 
-            override fun onCanGoBack(sessao: GeckoSession, valor: Boolean) { podeVoltar = valor }
+            override fun onCanGoBack(sessao: GeckoSession, valor: Boolean) {
+                podeVoltar = valor
+                Log.i(TAG, "podeVoltar=$valor em ${Endereco.paraMostrar(url)}")
+            }
             override fun onCanGoForward(sessao: GeckoSession, valor: Boolean) { podeAvancar = valor }
 
             override fun onLoadRequest(

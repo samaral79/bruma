@@ -3,4 +3,7 @@
     <string name="app_name">Bruma</string>
     <string name="canal_tor_nome">Tor</string>
     <string name="canal_tor_descricao">Estado do cliente Tor embutido</string>
+    <string name="widget_procurar">Procurar com a Bruma</string>
+    <string name="widget_com_tor">Procurar com o tor ligado</string>
+    <string name="widget_descricao">Caixa de pesquisa da Bruma, com atalho para ligar o tor</string>
 </resources>

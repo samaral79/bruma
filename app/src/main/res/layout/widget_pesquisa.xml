@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- RemoteViews só aceita um punhado de vistas: nada de ConstraintLayout nem de
+     Compose. Daí o LinearLayout simples. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_barra"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/fundo_widget"
+    android:gravity="center_vertical"
+    android:minHeight="56dp"
+    android:orientation="horizontal"
+    android:paddingStart="18dp"
+    android:paddingEnd="8dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+
+    <ImageView
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:contentDescription="@string/widget_procurar"
+        android:src="@drawable/ic_lupa"
+        android:tint="#8A9099" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/widget_procurar"
+        android:textColor="#8A9099"
+        android:textSize="15sp" />
+
+    <ImageView
+        android:id="@+id/widget_tor"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/fundo_widget_tor"
+        android:contentDescription="@string/widget_com_tor"
+        android:padding="10dp"
+        android:src="@drawable/ic_tor_pronto"
+        android:tint="#7C6BF0" />
+</LinearLayout>

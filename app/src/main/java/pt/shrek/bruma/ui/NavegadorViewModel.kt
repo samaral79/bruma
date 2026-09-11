@@ -20,9 +20,14 @@ import pt.shrek.bruma.tor.EstadoTor
 import pt.shrek.bruma.tor.MotorTor
 
 /** Qual folha está aberta. Só uma de cada vez. */
-enum class Folha { NENHUMA, SEPARADORES, DEFINICOES, ENDERECO, MAIS }
+enum class Folha { NENHUMA, SEPARADORES, ENDERECO, MAIS }
 
 class NavegadorViewModel(aplicacao: Application) : AndroidViewModel(aplicacao) {
+
+    private companion object {
+        const val ACAO_PROCURAR = "pt.shrek.bruma.PROCURAR"
+        const val ACAO_PROCURAR_COM_TOR = "pt.shrek.bruma.PROCURAR_COM_TOR"
+    }
 
     // A instância vem da Application: ver a nota em BrumaApp.definicoes sobre
     // porque não pode haver duas.
@@ -40,8 +45,11 @@ class NavegadorViewModel(aplicacao: Application) : AndroidViewModel(aplicacao) {
 
     var folha by mutableStateOf(Folha.NENHUMA)
 
-    /** O leque de ações em arco. Vive à parte das folhas: sobrepõe-se à página. */
+    /** A coluna de ações. Vive à parte das folhas: sobrepõe-se à página. */
     var lequeAberto by mutableStateOf(false)
+
+    /** As definições são um ecrã inteiro, não uma folha. */
+    var ecraDefinicoes by mutableStateOf(false)
 
     var capsulaVisivel by mutableStateOf(true)
 
@@ -56,7 +64,27 @@ class NavegadorViewModel(aplicacao: Application) : AndroidViewModel(aplicacao) {
     init {
         separadores.novo()
         observarTor()
-        if (definicoes.torAoArrancar) ligarTor()
+        acertarEstadoDoTorNoArranque()
+    }
+
+    /**
+     * Põe o proxy do Gecko de acordo com a realidade, logo ao arrancar.
+     *
+     * O Gecko **grava as preferências de proxy no perfil**, e elas sobrevivem ao
+     * fecho da app. Se a app for morta com o tor ligado, no arranque seguinte o
+     * perfil ainda aponta para o porto SOCKS da sessão anterior — um porto que
+     * já não existe. O resultado era um navegador que não abria nada e um ecrã
+     * preto, com um `ERROR_PROXY_CONNECTION_REFUSED` que só aparecia no registo.
+     *
+     * Por isso nunca se herda o que está no perfil: ou se liga o tor outra vez,
+     * ou se limpa o proxy de propósito.
+     */
+    private fun acertarEstadoDoTorNoArranque() {
+        if (definicoes.torAoArrancar || definicoes.modoTor == ModoTor.LIGADO) {
+            ligarTor()
+        } else {
+            MotorGecko.aplicarProxy(null)
+        }
     }
 
     /**
@@ -106,18 +134,27 @@ class NavegadorViewModel(aplicacao: Application) : AndroidViewModel(aplicacao) {
         android.util.Log.i("Bruma.Abrir", "entrada=[$entrada] destino=[$destino]")
         if (destino.isBlank()) return
 
-        if (Endereco.ehOnion(destino) && !torPronto) {
-            // Ligar o tor e ficar por aqui obrigava a escrever o endereço outra
-            // vez quando o circuito ficasse pronto — e um endereço onion tem 56
-            // caracteres que ninguém reescreve de boa vontade. Fica guardado e
-            // abre-se sozinho assim que houver circuito.
+        // Enquanto o tor arranca, a rede está apontada a um porto fechado de
+        // propósito, para nada sair em direto. Um pedido feito nesse intervalo
+        // falhava para sempre com "o proxy recusou a ligação" — e quem estava a
+        // ver só via uma página em branco. Fica em espera e abre-se sozinho.
+        //
+        // Vale para qualquer endereço, não só para os `.onion`: abrir a app por
+        // um link de outra app com o tor a arrancar caía exatamente no mesmo.
+        val precisaDeTor = definicoes.modoTor == ModoTor.LIGADO || Endereco.ehOnion(destino)
+        if (precisaDeTor && !torPronto) {
             destinoPendente = destino
             // A folha fecha-se já: deixá-la aberta escondia a página a carregar
             // por trás dela e dava a impressão de que nada tinha acontecido.
             folha = Folha.NENHUMA
             lequeAberto = false
-            avisar("A ligar o tor para abrir este .onion…")
-            ligarTor()
+            if (Endereco.ehOnion(destino)) {
+                avisar("A ligar o tor para abrir este .onion…")
+                ligarTor()
+            } else {
+                avisar("À espera do tor…")
+                if (definicoes.modoTor != ModoTor.LIGADO) ligarTor()
+            }
             return
         }
         ativo?.abrir(destino)
@@ -184,6 +221,52 @@ class NavegadorViewModel(aplicacao: Application) : AndroidViewModel(aplicacao) {
     fun fecharTudo() {
         folha = Folha.NENHUMA
         lequeAberto = false
+    }
+
+    /**
+     * Reenvia ao Gecko tudo o que ele precisa de saber, a cada mudança.
+     *
+     * É barato e evita a classe de erros em que se acrescenta uma definição, se
+     * esquece de a ligar ao motor, e ela fica gravada sem nunca fazer nada — que
+     * foi exatamente o que aconteceu com metade delas na primeira versão.
+     */
+    fun aplicarDefinicoesAoMotor() {
+        MotorGecko.definirJavascript(definicoes.javascript)
+        MotorGecko.definirApenasHttps(definicoes.apenasHttps)
+        MotorGecko.definirIsolamentoDeCookies(definicoes.isolarCookies)
+        MotorGecko.aplicarResistenciaAImpressaoDigital(definicoes.resistirImpressaoDigital)
+    }
+
+    /**
+     * Trata o que chega de fora: um link de outra app, ou um toque no widget.
+     *
+     * O `ACTION_VIEW` estava declarado no manifesto desde o princípio — a app
+     * oferecia-se para ser o navegador do sistema — mas ninguém lia o intent.
+     * Quem a escolhesse via a app abrir no ecrã inicial em vez da página que
+     * tinha tocado.
+     */
+    fun tratarIntencao(acao: String?, url: String?) {
+        when {
+            !url.isNullOrBlank() -> {
+                // Um link de fora abre em separador novo — substituir a página
+                // onde alguém estava é uma forma barata de lhe perder o trabalho
+                // — exceto se o separador atual estiver vazio, caso em que abrir
+                // outro só deixava um separador em branco para trás.
+                if (ativo?.url?.isNotBlank() == true) separadores.novo()
+                abrir(url)
+            }
+            acao == ACAO_PROCURAR_COM_TOR -> {
+                if (definicoes.modoTor != ModoTor.LIGADO) alternarTor()
+                folha = Folha.ENDERECO
+            }
+            acao == ACAO_PROCURAR -> folha = Folha.ENDERECO
+        }
+    }
+
+    fun abrirDefinicoes() {
+        folha = Folha.NENHUMA
+        lequeAberto = false
+        ecraDefinicoes = true
     }
 
     fun limparTudo() {
