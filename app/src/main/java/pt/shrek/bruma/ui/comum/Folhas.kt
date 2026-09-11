@@ -27,10 +27,12 @@ import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.Layers
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -360,6 +362,28 @@ fun FolhaMais(
     aoLimpar: () -> Unit,
     aoDefinicoes: () -> Unit,
 ) {
+    // "Limpar tudo" fecha separadores e apaga sessões, e estava a um toque de
+    // distância, logo por baixo de "Definições". Ao testar a app acertei nele
+    // por engano à primeira tentativa — o que é prova bastante de que precisa de
+    // confirmação.
+    var aConfirmarLimpeza by remember { mutableStateOf(false) }
+
+    if (aConfirmarLimpeza) {
+        AlertDialog(
+            onDismissRequest = { aConfirmarLimpeza = false },
+            title = { Text("Limpar tudo?") },
+            text = { Text("Fecha todos os separadores e apaga cookies, cache e sessões. Não há como desfazer.") },
+            confirmButton = {
+                TextButton(onClick = { aConfirmarLimpeza = false; aoLimpar() }) {
+                    Text("Limpar", color = CoresEstado.perigo)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { aConfirmarLimpeza = false }) { Text("Cancelar") }
+            },
+        )
+    }
+
     Column(
         Modifier
             .fillMaxWidth()
@@ -382,7 +406,10 @@ fun FolhaMais(
             Linha(Icons.Default.Autorenew, "Nova identidade", "Circuitos novos para todos os sítios", aoNovaIdentidade)
         }
         Linha(Icons.Default.Tune, "Definições", null, aoDefinicoes)
-        Linha(Icons.Default.DeleteSweep, "Limpar tudo", "Cookies, cache, sessões e separadores", aoLimpar, perigo = true)
+        Linha(
+            Icons.Default.DeleteSweep, "Limpar tudo", "Cookies, cache, sessões e separadores",
+            { aConfirmarLimpeza = true }, perigo = true,
+        )
     }
 }
 
